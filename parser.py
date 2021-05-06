@@ -1,6 +1,6 @@
 import pybison
 
-class Parser(self, stream):
+class Parser(object, stream):
     def __init__(self):
         self.stream = stream
 
