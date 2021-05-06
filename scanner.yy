@@ -48,12 +48,38 @@ ALPHA [a-zA-Z]
 										returntoken(T_LITERAL_STR); 
                   }
 
-
+";"               {
+                    yyloc.last_column++;
+                    returntoken(T_SEMICOLON);
+                  }
 ":="							{ 
                     yylloc.last_column += 2;
 										returntoken(T_ASSIGN); 
                   }
-
+":"               {
+                    yyloc.last_column++;
+                    returntoken(T_COLON);
+                  }
+"("               {
+                    yyloc.last_column++;
+                    returntoken(T_LPAREN);
+                  }
+")"               {
+                    yyloc.last_column++;
+                    returntoken(T_RPAREN);
+                  }
+"["               {
+                    yyloc.last_column++;
+                    returntoken(T_LBRACK);
+                  }
+"]"               {
+                    yyloc.last_column++;
+                    returntoken(T_RBRACK);
+                  }
+", "               {
+                    yyloc.last_column+=2;
+                    returntoken(T_COMMA_DELIM);
+                  }
 "+"							  { 
                     yylloc.last_column++;
 										returntoken(T_ADD); 
