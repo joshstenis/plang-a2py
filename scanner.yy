@@ -45,170 +45,169 @@ ALPHA [a-zA-Z]
 
 \".+\"						{ 
                     yylloc.last_column += strlen(yytext);
-										return T_LITERAL_STR; 
+										returntoken(T_LITERAL_STR); 
                   }
 
 
 ":="							{ 
                     yylloc.last_column += 2;
-										return T_ASSIGN; 
+										returntoken(T_ASSIGN); 
                   }
 
 "+"							  { 
                     yylloc.last_column++;
-										return T_ADD; 
+										returntoken(T_ADD); 
                   }
 
 "-"							  { 
                     yylloc.last_column++;
-										return T_SUB; 
+										returntoken(T_SUB); 
                   }
 
 "*"							  { 
                     yylloc.last_column++;
-										return T_MUL; 
+										returntoken(T_MUL); 
                   }
 
 "/"							  { 
                     yylloc.last_column++;
-										return T_DIV; 
+										returntoken(T_DIV); 
                   }
 
 "<"							  { 
                     yylloc.last_column++;
-										return T_LT; 
+										returntoken(T_LT); 
                   }
 
 ">"							  { 
                     yylloc.last_column++;
-										return T_GT; 
+										returntoken(T_GT); 
                   }
 
 ">="							{ 
                     yylloc.last_column+=2;
-										return T_GEQ; 
+										returntoken(T_GEQ); 
                   }
 
 "<="							{ 
                     yylloc.last_column+=2;
-										return T_LEQ; 
+										returntoken(T_LEQ); 
                   }
 
 "="							  { 
                     yylloc.last_column+=1;
-										return T_EQ; 
+										returntoken(T_EQ); 
                   }
 
 "<>"							{ 
                     yylloc.last_column+=2;
-										return T_NEQ; 
+										returntoken(T_NEQ); 
                   }
 
 "and"							{ 
                     yylloc.last_column+=3;
-										return T_AND; 
+										returntoken(T_AND); 
                   }
 
 "or"							{ 
                     yylloc.last_column+=2;
-										return T_OR; 
+										returntoken(T_OR); 
                   }
   
 "foreach"				  { 
                     yylloc.last_column+=7;
-										return T_FOREACH; 
+										returntoken(T_FOREACH); 
                   }
 
 "in"				      { 
                     yylloc.last_column+=7;
-										return T_IN; 
+										returntoken(T_IN); 
                   }
 
 "while"				    { 
                     yylloc.last_column+=5;
-										return T_WHILE; 
+										returntoken(T_WHILE); 
                   }
 
 "begin"					  { 
                     yylloc.last_column+=5;
-										return T_BEGIN; 
+										returntoken(T_BEGIN); 
                   }
 
 "end"				      { 
                     yylloc.last_column+=3;
-										return T_END; 
+										returntoken(T_END); 
                   }
 
 "if"				      { 
                     yylloc.last_column+=2;
-										return T_IF; 
+										returntoken(T_IF); 
                   }
 
 "then"				    { 
                     yylloc.last_column+=4;
-										return T_THEN; 
+										returntoken(T_THEN); 
                   }
 
 "else"				    { 
                     yylloc.last_column+=4;
-										return T_ELSE; 
+										returntoken(T_ELSE); 
                   }
 
 "write"						{ 
                     yylloc.last_column+=5;
-										return T_WRITE; 
+										returntoken(T_WRITE); 
                   }
 
 "read"						{ 
                     yylloc.last_column+=4;
-										return T_READ; 
+										returntoken(T_READ); 
                   }
 
 "int"							{ 
                     yylloc.last_column+=3;
-										return T_INTEGER; 
+										returntoken(T_INTEGER); 
                   }
 
 "float"						{ 
                     yylloc.last_column+=5;
-										return T_FLOAT; 
+										returntoken(T_FLOAT); 
                   }
 
 "repeat"				  { 
                     yylloc.last_column+=6;
-										return T_REPEAT; 
+										returntoken(T_REPEAT); 
                   }
 
 "until"				    { 
                     yylloc.last_column+=5;
-										return T_UNTIL; 
+										returntoken(T_UNTIL); 
                   }
 
 "declare"					{ 
                     yylloc.last_column+=7;
-										return T_DECLARE; 
+										returntoken(T_DECLARE); 
                   }
 
 
 {DIGIT}+[.]{DIGIT}+	{ 
                       yylloc.last_column += strlen(yytext);
-                      return T_NUM;
+                      returntoken(T_NUM);
 									  }
 
 {DIGIT}+					{ 
                     yylloc.last_column += strlen(yytext);
-										return T_NUM;
+										returntoken(T_NUM);
 									}
 
 ({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*     { 
                                           yylloc.last_column += strlen(yytext);
-																					return T_ID;
+																					returntoken(T_ID);
 																				}
 
-.									{  yylloc.last_column++; return yytext[0];}
-
-
-
+.									{  yylloc.last_column++; returntoken(yytext[0]);}
 
 
 %%
+
+yywrap() { return(1);}
