@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 
-"""
-PyBison file automatically generated from grammar file grammar.y
-You can edit this module, or import it and subclass the Parser class
-"""
-
 import sys
-
 from bison import BisonParser, BisonNode, BisonSyntaxError
 
 bisonFile = 'grammar.y'  # original bison file
@@ -14,19 +8,6 @@ lexFile = 'scanner.yy'    # original flex file
 
 
 class Parser(BisonParser):
-    """
-    bison Parser class generated automatically by bison2py from the
-    grammar file "grammar.y" and lex file "scanner.yy"
-
-    You may (and probably should) edit the methods in this class.
-    You can freely edit the rules (in the method docstrings), the
-    tokens list, the start symbol, and the precedences.
-
-    Each time this class is instantiated, a hashing technique in the
-    base class detects if you have altered any of the rules. If any
-    changes are detected, a new dynamic lib for the parser engine
-    will be generated automatically.
-    """
 
     # -------------------------------------------------
     # Default class to use for creating new parse nodes
