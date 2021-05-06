@@ -9,24 +9,11 @@ lexFile = 'scanner.yy'    # original flex file
 
 class Parser(BisonParser):
 
-    # -------------------------------------------------
-    # Default class to use for creating new parse nodes
-    # -------------------------------------------------
     defaultNodeClass = BisonNode
 
-    # --------------------------------------------
-    # basename of binary parser engine dynamic lib
-    # --------------------------------------------
-    bisonEngineLibName = 'parser-engine'
-
-    # ----------------------------------------------------------------
-    # lexer tokens - these must match those in your lex script (below)
-    # ----------------------------------------------------------------
+    bisonEngineLibName = 'simple'
     tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
 
-    # ------------------------------
-    # precedences
-    # ------------------------------
     precedences = (
         )
 
