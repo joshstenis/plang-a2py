@@ -1,4 +1,4 @@
 #!/usr/bin/env python
-import parser2
-p = parser2.Parser()
+import parser
+p = parser.Parser()
 p.run()
