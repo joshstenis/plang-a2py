@@ -232,9 +232,9 @@ class read_Node(ParseNode):
     def dump(self, indent=0):
         ParseNode.dump(self, indent)
 
-class writ_Node(ParseNode):
+class write_Node(ParseNode):
     """
-    Holds a "writ" parse target and its components.
+    Holds a "write" parse target and its components.
     """
     def __init__(self, **kw):
         ParseNode.__init__(self, **kw)
@@ -292,3 +292,441 @@ class Parser(BisonParser):
     # ------------------------------
     precedences = (
         )
+
+    start = 'program'
+
+    def on_program(self, target, option, names, items):
+        """
+        program: stmt_list T_SEMICOLON
+        """
+        return program_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_stmt_list(self, target, option, names, items):
+        """
+        stmt_list: stmt_list T_SEMICOLON stmt
+            | stmt
+        """
+        return stmt_list_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_stmt(self, target, option, names, items):
+        """
+        stmt : assignment
+            | read 
+            | write
+            | while
+            | repeat
+            | block
+            | foreach
+            | if_stmt
+        """
+        return stmt_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_block(self, target, option, names, items):
+        """
+        block : T_BEGIN stmt_list T_END
+        """
+        return block_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_foreach(self, target, option, names, items):
+        """
+        foreach : T_FOREACH T_ID
+            T_IN
+            T_LPAREN a_fact T_COLON a_fact T_RPAREN 
+            stmt
+        """
+        return foreach_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_while(self, target, option, names, items):
+        """
+        while : T_WHILE l_expr
+            T_BEGIN
+            stmt_list
+            T_END
+        """
+        return while_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_repeat(self, target, option, names, items):
+        """
+        repeat : T_REPEAT stmt_list T_UNTIL l_expr
+        """
+        return repeat_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_if_stmt(self, target, option, names, items):
+        """
+        if_stmt : T_IF l_expr
+            T_THEN stmt_list
+            T_ELSE else_stmt
+        """
+        return if_stmt_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_else_stmt(self, target, option, names, items):
+        """
+        else_stmt : 
+            | T_ELSE stmt
+        """
+        return else_stmt_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_assignment(self, target, option, names, items):
+        """
+        assignment : varref T_ASSIGN l_expr
+        """
+        return assignment_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_a_expr(self, target, option, names, items):
+        """
+        a_expr : a_expr T_ADD a_term 
+            | a_expr T_SUB a_term
+            | a_term
+        """
+        return a_expr_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_a_term(self, target, option, names, items):
+        """
+        a_term : a_term T_MUL a_fact
+            | a_term T_DIV a_fact
+            | a_fact
+        """
+        return a_term_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_a_fact(self, target, option, names, items):
+        """
+        a_fact : varref
+            | T_NUM
+            | T_LITERAL_STR
+            | T_SUB a_fact
+            | T_LPAREN a_expr T_RPAREN
+        """
+        return a_fact_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_varref(self, target, option, names, items):
+        """
+        varref : T_ID 
+            | varref T_LBRACK a_expr T_RBRACK
+        """
+        return varref_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_l_expr(self, target, option, names, items):
+        """
+        l_expr : l_expr T_AND l_term
+            | l_term
+        """
+        return l_expr_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_l_term(self, target, option, names, items):
+        """
+        l_term : l_term T_OR l_fact
+            | l_fact
+        """
+        return l_term_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_l_fact(self, target, option, names, items):
+        """
+        l_fact : l_fact oprel a_expr
+            | a_expr
+            | T_LPAREN l_expr T_RPAREN
+        """
+        return l_fact_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_oprel(self, target, option, names, items):
+        """
+        oprel : T_LT
+            | T_GT
+            | T_LEQ
+            | T_GEQ
+            | T_EQ
+            | T_NEQ
+        """
+        return oprel_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_read(self, target, option, names, items):
+        """
+        read : T_READ varlist
+        """
+        return read_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_write(self, target, option, names, items):
+        """
+        write: T_WRITE expr_list
+        """
+        return write_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_varlist(self, target, option, names, items):
+        """
+        varlist : varref
+            | varref T_COMMA_DELIM varlist
+        """
+        return varlist_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    def on_expr_list(self, target, option, names, items):
+        """
+        expr_list : a_expr
+            | expr_list T_COMMA_DELIM a_expr
+        """
+        return expr_list_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
+
+    lexscript = r"""
+    %{
+    #include <stdio.h>
+    #include <string.h>
+    #include "Python.h"
+    #define YYSTYPE void *
+    #include "tokens.h"
+    extern void *py_parser;
+    extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
+    #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
+    #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
+
+    #include "simple.h"
+    # undef yywrap
+    # define yywrap() 1
+
+    #undef YY_DECL
+    #define YY_DECL int yylex()
+    YY_DECL;
+
+    // Code run each time a pattern is matched.
+    #undef  YY_USER_ACTION  
+    # define YY_USER_ACTION  {}
+
+    %}
+
+    %option yylineno
+    %option noyywrap 
+
+    DIGIT [0-9] 
+    ALPHA [a-zA-Z]
+
+    %%
+
+    \/\/.*$           { yylloc.last_line++; yylloc.last_column = 0;}	
+    [ ]+						  { yylloc.last_column++;}	
+    [\t]+						  { yylloc.last_column+=2;}	
+    [\n]+						  {yylloc.last_line++; yylloc.last_column = 0;}	
+    \".+\"						{ 
+                        yylloc.last_column += strlen(yytext);
+                                            returntoken(T_LITERAL_STR); 
+                    }
+    ";"               {
+                        yyloc.last_column++;
+                        returntoken(T_SEMICOLON);
+                    }
+    ":="							{ 
+                        yylloc.last_column += 2;
+                                            returntoken(T_ASSIGN); 
+                    }
+    ":"               {
+                        yyloc.last_column++;
+                        returntoken(T_COLON);
+                    }
+    "("               {
+                        yyloc.last_column++;
+                        returntoken(T_LPAREN);
+                    }
+    ")"               {
+                        yyloc.last_column++;
+                        returntoken(T_RPAREN);
+                    }
+    "\["               {
+                        yyloc.last_column++;
+                        returntoken(T_LBRACK);
+                    }
+    "]"               {
+                        yyloc.last_column++;
+                        returntoken(T_RBRACK);
+                    }
+    ", "               {
+                        yyloc.last_column+=2;
+                        returntoken(T_COMMA_DELIM);
+                    }
+    "+"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_ADD); 
+                    }
+    "-"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_SUB); 
+                    }
+    "*"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_MUL); 
+                    }
+    "/"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_DIV); 
+                    }
+    "<"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_LT); 
+                    }
+    ">"							  { 
+                        yylloc.last_column++;
+                                            returntoken(T_GT); 
+                    }
+    ">="							{ 
+                        yylloc.last_column+=2;
+                                            returntoken(T_GEQ); 
+                    }
+    "<="							{ 
+                        yylloc.last_column+=2;
+                                            returntoken(T_LEQ); 
+                    }
+    "="							  { 
+                        yylloc.last_column+=1;
+                                            returntoken(T_EQ); 
+                    }
+    "<>"							{ 
+                        yylloc.last_column+=2;
+                                            returntoken(T_NEQ); 
+                    }
+    "and"							{ 
+                        yylloc.last_column+=3;
+                                            returntoken(T_AND); 
+                    }
+    "or"							{ 
+                        yylloc.last_column+=2;
+                                            returntoken(T_OR); 
+                    }
+    "foreach"				  { 
+                        yylloc.last_column+=7;
+                                            returntoken(T_FOREACH); 
+                    }
+    "in"				      { 
+                        yylloc.last_column+=7;
+                                            returntoken(T_IN); 
+                    }
+    "while"				    { 
+                        yylloc.last_column+=5;
+                                            returntoken(T_WHILE); 
+                    }
+    "begin"					  { 
+                        yylloc.last_column+=5;
+                                            returntoken(T_BEGIN); 
+                    }
+    "end"				      { 
+                        yylloc.last_column+=3;
+                                            returntoken(T_END); 
+                    }
+    "if"				      { 
+                        yylloc.last_column+=2;
+                                            returntoken(T_IF); 
+                    }
+    "then"				    { 
+                        yylloc.last_column+=4;
+                                            returntoken(T_THEN); 
+                    }
+    "else"				    { 
+                        yylloc.last_column+=4;
+                                            returntoken(T_ELSE); 
+                    }
+    "write"						{ 
+                        yylloc.last_column+=5;
+                                            returntoken(T_WRITE); 
+                    }
+    "read"						{ 
+                        yylloc.last_column+=4;
+                                            returntoken(T_READ); 
+                    }
+    "int"							{ 
+                        yylloc.last_column+=3;
+                                            returntoken(T_INTEGER); 
+                    }
+    "float"						{ 
+                        yylloc.last_column+=5;
+                                            returntoken(T_FLOAT); 
+                    }
+    "repeat"				  { 
+                        yylloc.last_column+=6;
+                                            returntoken(T_REPEAT); 
+                    }
+    "until"				    { 
+                        yylloc.last_column+=5;
+                                            returntoken(T_UNTIL); 
+                    }
+    "declare"					{ 
+                        yylloc.last_column+=7;
+                                            returntoken(T_DECLARE); 
+                    }
+    {DIGIT}+[.]{DIGIT}+	{ 
+                        yylloc.last_column += strlen(yytext);
+                        returntoken(T_NUM);
+                                        }
+    {DIGIT}+					{ 
+                        yylloc.last_column += strlen(yytext);
+                                            returntoken(T_NUM);
+                                        }
+    ({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*     { 
+                                            yylloc.last_column += strlen(yytext);
+                                                                                        returntoken(T_ID);
+                                                                                       }
+    .									{  yylloc.last_column++; returntoken(yytext[0]);}
+
+    %%
+
+    yywrap() { return(1);}
+    """
