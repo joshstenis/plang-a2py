@@ -292,4 +292,3 @@ class Parser(BisonParser):
     # ------------------------------
     precedences = (
         )
-
