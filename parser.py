@@ -730,3 +730,12 @@ class Parser(BisonParser):
 
     yywrap() { return(1);}
     """
+
+if __name__ == "__main__":
+    p = Parser()
+    prgm = input()
+    try:
+        p.run(file=prgm)
+        print("PASS")
+    except:
+        print("FAIL")
