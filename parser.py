@@ -297,7 +297,7 @@ class Parser(BisonParser):
 
     def on_program(self, target, option, names, items):
         """
-        program: stmt_list T_SEMICOLON
+        program : stmt_list T_SEMICOLON
         """
         return program_Node(target=target, 
                             option=option, 
@@ -306,7 +306,7 @@ class Parser(BisonParser):
 
     def on_stmt_list(self, target, option, names, items):
         """
-        stmt_list: stmt_list T_SEMICOLON stmt
+        stmt_list : stmt_list T_SEMICOLON stmt
             | stmt
         """
         return stmt_list_Node(target=target, 
@@ -503,7 +503,7 @@ class Parser(BisonParser):
 
     def on_write(self, target, option, names, items):
         """
-        write: T_WRITE expr_list
+        write : T_WRITE expr_list
         """
         return write_Node(target=target, 
                             option=option, 
@@ -534,15 +534,15 @@ class Parser(BisonParser):
     %{
     #include <stdio.h>
     #include <string.h>
-    #include "Python.h"
+    #include <Python.h>
     #define YYSTYPE void *
-    #include "tokens.h"
+    // #include "tokens.h"
     extern void *py_parser;
     extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
     #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
     #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
-    #include "simple.h"
+    // #include "simple.h"
     # undef yywrap
     # define yywrap() 1
 
@@ -727,8 +727,6 @@ class Parser(BisonParser):
     .									{  yylloc.last_column++; returntoken(yytext[0]);}
 
     %%
-
-    yywrap() { return(1);}
     """
 
 if __name__ == "__main__":

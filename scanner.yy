@@ -1,7 +1,7 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "Python.h"
+#include <Python.h>
 #define YYSTYPE void *
 #include "tokens.h"
 extern void *py_parser;
