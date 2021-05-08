@@ -542,7 +542,7 @@ class Parser(BisonParser):
     #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
     #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
-    // #include "simple.h"
+    #include "simple.h"
     # undef yywrap
     # define yywrap() 1
 
