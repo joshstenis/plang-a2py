@@ -550,6 +550,9 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyUnicode_FromString(strdup(yytext)); return (tok);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
+//#undef yywrap
+//#define yywrap() 1
+
 //#undef YY_DECL
 //#define YY_DECL int yylex()
 //YY_DECL;
