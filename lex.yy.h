@@ -201,9 +201,6 @@ void yyfree ( void *  );
 
 /* Begin user sect3 */
 
-#define yywrap() (/*CONSTCOND*/1)
-#define YY_SKIP_YYWRAP
-
 extern int yylineno;
 
 extern char *yytext;
@@ -467,9 +464,9 @@ extern int yylex (void);
 #undef yyTABLES_NAME
 #endif
 
-#line 197 "/tmp/pybison/pybison_Parser/tmp.l"
+#line 194 "/tmp/pybison/pybison_Parser/tmp.l"
 
 
-#line 473 "lex.yy.h"
+#line 470 "lex.yy.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

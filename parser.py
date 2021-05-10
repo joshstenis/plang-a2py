@@ -550,21 +550,18 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
-# undef yywrap
-# define yywrap() 1
+//# undef yywrap
+//# define yywrap() 1
 
-#undef YY_DECL
-#define YY_DECL int yylex()
-YY_DECL;
+//#undef YY_DECL
+//#define YY_DECL int yylex()
+//YY_DECL;
 
 // Code run each time a pattern is matched.
-#undef  YY_USER_ACTION  
-# define YY_USER_ACTION  {}
+//#undef  YY_USER_ACTION  
+//# define YY_USER_ACTION  {}
 
 %}
-
-%option yylineno
-%option noyywrap 
 
 DIGIT [0-9] 
 ALPHA [a-zA-Z]
@@ -736,10 +733,13 @@ ALPHA [a-zA-Z]
 
 %%
 
-//yywrap() { return(1);}
+yywrap() { return(1);}
     """
 
 if __name__ == "__main__":
     print("I EXIST")
-    p = Parser(verbose=1)
-    p.run()
+    try:
+        p = Parser(verbose=1)
+    except Exception as e:
+        print(e)
+    # p.run()
