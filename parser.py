@@ -285,8 +285,8 @@ class Parser(BisonParser):
     # flexFile = 'tmp.yy'
     # flexCFile = 'lex.yy.c'
 
-    cflags_pre = ['-I']
-    cflags_post = ['-O3']
+    # cflags_pre = ['-I']
+    # cflags_post = ['-O3']
 
     bisonEngineLibName = 'parser'
 
@@ -315,10 +315,10 @@ class Parser(BisonParser):
                             option=option, 
                             names=names, 
                             items=items)
-        if option != 0:
-            return self.error(node)
-        else:
-            return node
+        # if option != 0:
+        #     return self.error(node)
+        # else:
+        return node
 
     def on_stmt_list(self, target, option, names, items):
         """
@@ -790,5 +790,5 @@ yywrap() { return(1);}
 
 if __name__ == "__main__":
     print("I EXIST")
-    p = Parser(keepfiles=0, verbose=1)
+    p = Parser(verbose=1)
     # p.run()
