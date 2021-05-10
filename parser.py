@@ -302,10 +302,12 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        return program_Node(target=target, 
+        node = program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        print(node.dump())
+        return node
 
     def on_stmt_list(self, target, option, names, items):
         """
@@ -540,6 +542,7 @@ class Parser(BisonParser):
     
     lexscript = r"""
 %{
+int lineno = 0;
 #include <stdio.h>
 #include <string.h>
 #include <Python.h>
@@ -725,7 +728,6 @@ ALPHA [a-zA-Z]
                                         yylloc.last_column += strlen(yytext);
                                                                                     returntoken(T_ID);
                                                                                 }
-
 .									{  yylloc.last_column++; returntoken(yytext[0]);}
 
 %%
@@ -736,4 +738,4 @@ yywrap() { return(1);}
 if __name__ == "__main__":
     print("I EXIST")
     p = Parser(verbose=1)
-    p.run()
+    # p.run()
