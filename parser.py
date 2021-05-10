@@ -276,22 +276,22 @@ class Parser(BisonParser):
     will be generated automatically.
     """
 
-    bisonCmd = ['bison', '-d', '-v', '-t']
-    bisonFile = 'tmp.y'
-    bisonCFile = 'tmp.tab.c'
-    bisonHFIle = 'tmp.tab.h'
+    # bisonCmd = ['bison', '-d', '-v', '-t']
+    # bisonFile = 'tmp.y'
+    # bisonCFile = 'tmp.tab.c'
+    # bisonHFIle = 'tmp.tab.h'
 
     flexCmd = ['flex', '-o']
     flexFile = 'tmp.yy'
     flexCFile = 'lex.yy.c'
 
-    # cflags_pre = ['-fPIC']
-    # cflags_post = ['-O3', '-g']
+    cflags_pre = ['-I']
+    cflags_post = ['-O3']
 
     # file = None
     # keepfiles = 0
 
-    bisonEngineLibName = 'parser2-engine'
+    bisonEngineLibName = 'parser'
 
     tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
     precedences = ()
@@ -303,16 +303,23 @@ class Parser(BisonParser):
         except EOFError:
             return ''
 
+    def error(self, node):
+        return 'Syntax Error: %s', node.target
+
     start = 'program'
 
     def on_program(self, target, option, names, items):
         """
         program : stmt_list T_SEMICOLON
         """
-        return program_Node(target=target, 
+        node = program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        if option != 0:
+            return self.error(node)
+        else:
+            return node
 
     def on_stmt_list(self, target, option, names, items):
         """
@@ -780,5 +787,5 @@ yywrap() { return(1);}
 
 if __name__ == "__main__":
     print("I EXIST")
-    p = Parser()
-    p.run()
+    p = Parser(verbose=1, interative=True)
+    # p.run()

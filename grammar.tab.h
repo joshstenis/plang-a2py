@@ -1,9 +1,8 @@
 /* A Bison parser, made by GNU Bison 3.4.1.  */
 
-/* Bison interface for Yacc-like parsers in C
+/* Skeleton interface for Bison GLR parsers in C
 
-   Copyright (C) 1984, 1989-1990, 2000-2015, 2018-2019 Free Software Foundation,
-   Inc.
+   Copyright (C) 2002-2015, 2018-2019 Free Software Foundation, Inc.
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -31,9 +30,6 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-/* Undocumented macros, especially those whose name start with YY_,
-   are private implementation details.  Do not rely on them.  */
-
 #ifndef YY_YY_GRAMMAR_TAB_H_INCLUDED
 # define YY_YY_GRAMMAR_TAB_H_INCLUDED
 /* Debug traces.  */
@@ -43,24 +39,6 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
-/* "%code requires" blocks.  */
-#line 14 "/tmp/pybison/pybison_Parser/grammar.y"
-
-
-typedef void * yyscan_t;
-#define YYLTYPE YYLTYPE
-typedef struct YYLTYPE
-{
-  int first_line;
-  int first_column;
-  int last_line;
-  int last_column;
-  char *filename;
-} YYLTYPE;
-
-int yyerror(char *msg);
-
-#line 64 "grammar.tab.h"
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
