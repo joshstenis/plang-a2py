@@ -9,19 +9,19 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
 #include "simple.h"
-# undef yywrap
+//# undef yywrap
 // # define yywrap() 1
 
 
 
-#undef YY_DECL
-#define YY_DECL int yylex()
-YY_DECL;
+// #undef YY_DECL
+// #define YY_DECL int yylex()
+// YY_DECL;
 
 
 // Code run each time a pattern is matched.
-#undef  YY_USER_ACTION  
-# define YY_USER_ACTION  {}
+// #undef  YY_USER_ACTION  
+// # define YY_USER_ACTION  {}
 
 %}
 
@@ -141,7 +141,7 @@ ALPHA [a-zA-Z]
                 }
 
 "in"				      { 
-                    yylloc.last_column+=7;
+                    yylloc.last_column+=2;
                                         returntoken(T_IN); 
                 }
 
