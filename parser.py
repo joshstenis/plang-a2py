@@ -281,6 +281,10 @@ class Parser(BisonParser):
     # bisonCFile = 'tmp.tab.c'
     # bisonHFIle = 'tmp.tab.h'
 
+    # flexCmd = ['flex', '-o']
+    # flexFile = 'tmp.yy'
+    # flexCFile = 'lex.yy.c'
+
     cflags_pre = ['-I']
     cflags_post = ['-O3']
 
@@ -544,10 +548,6 @@ class Parser(BisonParser):
                             option=option, 
                             names=names, 
                             items=items)
-
-    # flexCmd = ['flex', '-o']
-    # flexFile = 'tmp.yy'
-    # flexCFile = 'lex.yy.c'
     
     lexscript = r"""
 %{
