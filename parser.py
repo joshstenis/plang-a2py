@@ -287,9 +287,9 @@ class Parser(BisonParser):
     def read(self, nbytes):
         try:
             return input() + '\n'
-        except BisonSyntaxError:
-            print('!!! Invalid token !!!\n')
-            sys.exit()
+        # except BisonSyntaxError:
+        #     print('!!! Invalid token !!!\n')
+        #     sys.exit()
         except EOFError:
             return ''
 
@@ -547,11 +547,8 @@ class Parser(BisonParser):
 #include "simple.h"
 extern void *py_parser;
 extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
-#define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
+#define returntoken(tok) yylval = PyUnicode_FromString(strdup(yytext)); return (tok);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
-
-//# undef yywrap
-//# define yywrap() 1
 
 //#undef YY_DECL
 //#define YY_DECL int yylex()
@@ -738,8 +735,5 @@ yywrap() { return(1);}
 
 if __name__ == "__main__":
     print("I EXIST")
-    try:
-        p = Parser(verbose=1)
-    except Exception as e:
-        print(e)
-    # p.run()
+    p = Parser(verbose=1)
+    p.run()
