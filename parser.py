@@ -288,7 +288,7 @@ class Parser(BisonParser):
     # cflags_pre = ['-I']
     # cflags_post = ['-O3']
 
-    #bisonEngineLibName = 'parser'
+    bisonEngineLibName = 'parser'
 
     tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
     precedences = (('left', ('T_SUB', 'T_ADD')),
@@ -556,13 +556,12 @@ class Parser(BisonParser):
 #include <string.h>
 #include <Python.h>
 #define YYSTYPE void *
+#include "tokens.h"
 extern void *py_parser;
 extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
-#define returntoken(tok) yylval = PyUnicode_FromString(strdup(yytext)); return (tok);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
-#include "tokens.h"
 //# undef yywrap
 //# define yywrap() 1
 
