@@ -738,4 +738,4 @@ yywrap() { return(1);}
 if __name__ == "__main__":
     print("I EXIST")
     p = Parser(verbose=1)
-    # p.run()
+    p.run()
