@@ -522,7 +522,7 @@ class Parser(BisonParser):
                             items=items)
 
     lexscript = r"""{0}""".format(open(lexFile, 'r'))
-    
+
     bisonFile = bisonFile
 
 if __name__ == "__main__":
