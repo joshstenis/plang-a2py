@@ -288,9 +288,6 @@ class Parser(BisonParser):
     cflags_pre = ['-I']
     cflags_post = ['-O3']
 
-    # file = None
-    # keepfiles = 0
-
     bisonEngineLibName = 'parser'
 
     tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
@@ -306,7 +303,7 @@ class Parser(BisonParser):
             return ''
 
     def error(self, node):
-        return 'Syntax Error: %s', node.target
+        return 'Invalid token: %s', node.target
 
     start = 'program'
 
@@ -328,6 +325,11 @@ class Parser(BisonParser):
         stmt_list : stmt_list T_SEMICOLON stmt
             | stmt
         """
+        if option == 0:
+            print("Tokens: %s : %s", names[0], names[2])
+        else:
+            print("Tokens: %s", names[0])
+        
         return stmt_list_Node(target=target, 
                             option=option, 
                             names=names, 
