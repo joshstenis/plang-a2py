@@ -302,12 +302,10 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        node = program_Node(target=target, 
+        return program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
-        print(node.dump())
-        return node
 
     def on_stmt_list(self, target, option, names, items):
         """
