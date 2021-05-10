@@ -75,7 +75,14 @@ extern int yydebug;
     T_DECLARE = 285,
     T_INTEGER = 286,
     T_FLOAT = 287,
-    T_LITERAL_STR = 288
+    T_LITERAL_STR = 288,
+    T_SEMICOLON = 289, 
+    T_COLON = 290, 
+    T_LPAREN = 291, 
+    T_RPAREN = 292, 
+    T_LBRACK = 293, 
+    T_RBRACK = 294, 
+    T_COMMA_DELIM = 295
   };
 #endif
 

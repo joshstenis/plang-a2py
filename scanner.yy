@@ -3,7 +3,6 @@
 #include <string.h>
 #include <Python.h>
 #define YYSTYPE void *
-#include "tokens.h"
 extern void *py_parser;
 extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
@@ -11,7 +10,7 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 
 #include "simple.h"
 # undef yywrap
-# define yywrap() 1
+// # define yywrap() 1
 
 
 
@@ -34,10 +33,6 @@ ALPHA [a-zA-Z]
 
 %%
 
-
-
-
-
 \/\/.*$           { yylloc.last_line++; yylloc.last_column = 0;}	
 [ ]+						  { yylloc.last_column++;}	
 [\t]+						  { yylloc.last_column+=2;}	
@@ -45,191 +40,191 @@ ALPHA [a-zA-Z]
 
 \".+\"						{ 
                     yylloc.last_column += strlen(yytext);
-										returntoken(T_LITERAL_STR); 
-                  }
+                                        returntoken(T_LITERAL_STR); 
+                }
 
 ";"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_SEMICOLON);
-                  }
+                }
 ":="							{ 
                     yylloc.last_column += 2;
-										returntoken(T_ASSIGN); 
-                  }
+                                        returntoken(T_ASSIGN); 
+                }
 ":"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_COLON);
-                  }
+                }
 "("               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_LPAREN);
-                  }
+                }
 ")"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_RPAREN);
-                  }
-"["               {
-                    yyloc.last_column++;
+                }
+"\["               {
+                    yylloc.last_column++;
                     returntoken(T_LBRACK);
-                  }
+                }
 "]"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_RBRACK);
-                  }
+                }
 ", "               {
-                    yyloc.last_column+=2;
+                    yylloc.last_column+=2;
                     returntoken(T_COMMA_DELIM);
-                  }
+                }
 "+"							  { 
                     yylloc.last_column++;
-										returntoken(T_ADD); 
-                  }
+                                        returntoken(T_ADD); 
+                }
 
 "-"							  { 
                     yylloc.last_column++;
-										returntoken(T_SUB); 
-                  }
+                                        returntoken(T_SUB); 
+                }
 
 "*"							  { 
                     yylloc.last_column++;
-										returntoken(T_MUL); 
-                  }
+                                        returntoken(T_MUL); 
+                }
 
 "/"							  { 
                     yylloc.last_column++;
-										returntoken(T_DIV); 
-                  }
+                                        returntoken(T_DIV); 
+                }
 
 "<"							  { 
                     yylloc.last_column++;
-										returntoken(T_LT); 
-                  }
+                                        returntoken(T_LT); 
+                }
 
 ">"							  { 
                     yylloc.last_column++;
-										returntoken(T_GT); 
-                  }
+                                        returntoken(T_GT); 
+                }
 
 ">="							{ 
                     yylloc.last_column+=2;
-										returntoken(T_GEQ); 
-                  }
+                                        returntoken(T_GEQ); 
+                }
 
 "<="							{ 
                     yylloc.last_column+=2;
-										returntoken(T_LEQ); 
-                  }
+                                        returntoken(T_LEQ); 
+                }
 
 "="							  { 
                     yylloc.last_column+=1;
-										returntoken(T_EQ); 
-                  }
+                                        returntoken(T_EQ); 
+                }
 
 "<>"							{ 
                     yylloc.last_column+=2;
-										returntoken(T_NEQ); 
-                  }
+                                        returntoken(T_NEQ); 
+                }
 
 "and"							{ 
                     yylloc.last_column+=3;
-										returntoken(T_AND); 
-                  }
+                                        returntoken(T_AND); 
+                }
 
 "or"							{ 
                     yylloc.last_column+=2;
-										returntoken(T_OR); 
-                  }
-  
+                                        returntoken(T_OR); 
+                }
+
 "foreach"				  { 
                     yylloc.last_column+=7;
-										returntoken(T_FOREACH); 
-                  }
+                                        returntoken(T_FOREACH); 
+                }
 
 "in"				      { 
                     yylloc.last_column+=7;
-										returntoken(T_IN); 
-                  }
+                                        returntoken(T_IN); 
+                }
 
 "while"				    { 
                     yylloc.last_column+=5;
-										returntoken(T_WHILE); 
-                  }
+                                        returntoken(T_WHILE); 
+                }
 
 "begin"					  { 
                     yylloc.last_column+=5;
-										returntoken(T_BEGIN); 
-                  }
+                                        returntoken(T_BEGIN); 
+                }
 
 "end"				      { 
                     yylloc.last_column+=3;
-										returntoken(T_END); 
-                  }
+                                        returntoken(T_END); 
+                }
 
 "if"				      { 
                     yylloc.last_column+=2;
-										returntoken(T_IF); 
-                  }
+                                        returntoken(T_IF); 
+                }
 
 "then"				    { 
                     yylloc.last_column+=4;
-										returntoken(T_THEN); 
-                  }
+                                        returntoken(T_THEN); 
+                }
 
 "else"				    { 
                     yylloc.last_column+=4;
-										returntoken(T_ELSE); 
-                  }
+                                        returntoken(T_ELSE); 
+                }
 
 "write"						{ 
                     yylloc.last_column+=5;
-										returntoken(T_WRITE); 
-                  }
+                                        returntoken(T_WRITE); 
+                }
 
 "read"						{ 
                     yylloc.last_column+=4;
-										returntoken(T_READ); 
-                  }
+                                        returntoken(T_READ); 
+                }
 
 "int"							{ 
                     yylloc.last_column+=3;
-										returntoken(T_INTEGER); 
-                  }
+                                        returntoken(T_INTEGER); 
+                }
 
 "float"						{ 
                     yylloc.last_column+=5;
-										returntoken(T_FLOAT); 
-                  }
+                                        returntoken(T_FLOAT); 
+                }
 
 "repeat"				  { 
                     yylloc.last_column+=6;
-										returntoken(T_REPEAT); 
-                  }
+                                        returntoken(T_REPEAT); 
+                }
 
 "until"				    { 
                     yylloc.last_column+=5;
-										returntoken(T_UNTIL); 
-                  }
+                                        returntoken(T_UNTIL); 
+                }
 
 "declare"					{ 
                     yylloc.last_column+=7;
-										returntoken(T_DECLARE); 
-                  }
+                                        returntoken(T_DECLARE); 
+                }
 
 
 {DIGIT}+[.]{DIGIT}+	{ 
-                      yylloc.last_column += strlen(yytext);
-                      returntoken(T_NUM);
-									  }
+                    yylloc.last_column += strlen(yytext);
+                    returntoken(T_NUM);
+                                    }
 
 {DIGIT}+					{ 
                     yylloc.last_column += strlen(yytext);
-										returntoken(T_NUM);
-									}
+                                        returntoken(T_NUM);
+                                    }
 
 ({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*     { 
-                                          yylloc.last_column += strlen(yytext);
-																					returntoken(T_ID);
-																				}
+                                        yylloc.last_column += strlen(yytext);
+                                                                                    returntoken(T_ID);
+                                                                                }
 
 .									{  yylloc.last_column++; returntoken(yytext[0]);}
 

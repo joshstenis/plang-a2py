@@ -281,10 +281,6 @@ class Parser(BisonParser):
     # bisonCFile = 'tmp.tab.c'
     # bisonHFIle = 'tmp.tab.h'
 
-    flexCmd = ['flex', '-o']
-    flexFile = 'tmp.yy'
-    flexCFile = 'lex.yy.c'
-
     cflags_pre = ['-I']
     cflags_post = ['-O3']
 
@@ -549,13 +545,16 @@ class Parser(BisonParser):
                             names=names, 
                             items=items)
 
+    # flexCmd = ['flex', '-o']
+    # flexFile = 'tmp.yy'
+    # flexCFile = 'lex.yy.c'
+    
     lexscript = r"""
 %{
 #include <stdio.h>
 #include <string.h>
 #include <Python.h>
 #define YYSTYPE void *
-#include "tokens.h"
 extern void *py_parser;
 extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyString_FromString(strdup(yytext)); return (tok);
@@ -563,7 +562,7 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 
 #include "simple.h"
 # undef yywrap
-# define yywrap() 1
+// # define yywrap() 1
 
 
 
@@ -597,7 +596,7 @@ ALPHA [a-zA-Z]
                 }
 
 ";"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_SEMICOLON);
                 }
 ":="							{ 
@@ -605,27 +604,27 @@ ALPHA [a-zA-Z]
                                         returntoken(T_ASSIGN); 
                 }
 ":"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_COLON);
                 }
 "("               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_LPAREN);
                 }
 ")"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_RPAREN);
                 }
-"["               {
-                    yyloc.last_column++;
+"\["               {
+                    yylloc.last_column++;
                     returntoken(T_LBRACK);
                 }
 "]"               {
-                    yyloc.last_column++;
+                    yylloc.last_column++;
                     returntoken(T_RBRACK);
                 }
 ", "               {
-                    yyloc.last_column+=2;
+                    yylloc.last_column+=2;
                     returntoken(T_COMMA_DELIM);
                 }
 "+"							  { 
