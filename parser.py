@@ -300,7 +300,7 @@ class Parser(BisonParser):
         try:
             return input() + '\n'
         except BisonSyntaxError:
-            print('Invalid token\n')
+            print('!!! Invalid token !!!\n')
             sys.exit()
         except EOFError:
             return ''
