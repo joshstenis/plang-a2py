@@ -72,7 +72,7 @@
 void *(*py_callback)(void *, char *, int, int, ...);
 void (*py_input)(void *, char *, int *, int);
 void *py_parser;
-__attribute__ ((dllexport)) char *rules_hash = "d2054c11511646d14a8fcc8d18c20f08afb2baaf";
+__attribute__ ((dllexport)) char *rules_hash = "286d9886bc4741c9199dd17d96a996ab7b51d760";
 #define YYERROR_VERBOSE 1
 
 

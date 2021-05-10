@@ -521,7 +521,7 @@ class Parser(BisonParser):
                             names=names, 
                             items=items)
 
-    lexscript = r"""{0}""".format(open(lexFile, 'r'))
+    lexscript = lexFile
 
     bisonFile = bisonFile
 
