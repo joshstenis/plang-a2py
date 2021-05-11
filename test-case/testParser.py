@@ -100,7 +100,7 @@ class Parser(BisonParser):
     # --------------------------------------------
     # basename of binary parser engine dynamic lib
     # --------------------------------------------
-    bisonEngineLibName = 'testParser-engine'
+    bisonEngineLibName = 'testParser'
 
     # ----------------------------------------------------------------
     # lexer tokens - these must match those in your lex script (below)
@@ -177,6 +177,7 @@ DIGIT [0-9]
 "-"					{ returntoken(T_SUB); }
 "\*"				{ returntoken(T_MUL); }
 "/"					{ returntoken(T_DIV); }
+{DIGIT}+[.]{DIGIT}+	                            { returntoken(T_NUM); }
 {DIGIT}+					                    { returntoken(T_NUM); }
 .
 
