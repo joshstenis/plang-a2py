@@ -287,14 +287,11 @@ class Parser(BisonParser):
     def read(self, nbytes):
         try:
             return input() + '\n'
-        # except BisonSyntaxError:
-        #     print('!!! Invalid token !!!\n')
-        #     sys.exit()
         except EOFError:
             return ''
 
-    # def error(self, node):
-    #     return 'Invalid token: %s', node.target
+    def synerror(self, node):
+        return BisonSyntaxError('Invalid token\n')
 
     start = 'program'
 
@@ -306,8 +303,10 @@ class Parser(BisonParser):
                             option=option, 
                             names=names, 
                             items=items)
-        print(node.dump())
-        return node
+        if option != 0:
+            raise self.synerror(node)
+        else:
+            return node
 
     def on_stmt_list(self, target, option, names, items):
         """
