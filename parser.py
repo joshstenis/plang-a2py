@@ -278,20 +278,16 @@ class Parser(BisonParser):
 
     bisonEngineLibName = 'parser-engine'
 
-    tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
+    tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM', 'T_QUIT']
     precedences = (('left', ('T_SUB', 'T_ADD')),
         ('left', ('T_MUL', 'T_DIV')),
     )
 
-    # Override default read method
     def read(self, nbytes):
         try:
-            return input() + '\n'
+            return input('I EXIST: ') + '\n'
         except EOFError:
-            return ''
-
-    def synerror(self, node):
-        return BisonSyntaxError('Invalid token\n')
+            sys.exit()
 
     start = 'program'
 
@@ -299,14 +295,10 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        node = program_Node(target=target, 
+        return program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
-        if option != 0:
-            raise self.synerror(node)
-        else:
-            return node
 
     def on_stmt_list(self, target, option, names, items):
         """
@@ -401,6 +393,8 @@ class Parser(BisonParser):
         """
         assignment : varref T_ASSIGN l_expr
         """
+        if option == 0:
+            print('PASS')
         return assignment_Node(target=target, 
                             option=option, 
                             names=names, 
@@ -563,6 +557,8 @@ DIGIT [0-9]
 ALPHA [a-zA-Z]
 
 %%
+
+"quit-parser"       { returntoken(T_QUIT); }
 
 \/\/.*$           { yylloc.last_line++; yylloc.last_column = 0;}	
 [ ]+						  { yylloc.last_column++;}	
@@ -732,6 +728,6 @@ yywrap() { return(1);}
     """
 
 if __name__ == "__main__":
-    print("I EXIST")
     p = Parser(verbose=1)
-    p.run()
+    p.run()             # file='inputs/expr1_pass.smp'
+    sys.exit()

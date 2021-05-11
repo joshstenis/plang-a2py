@@ -82,7 +82,8 @@ extern int yydebug;
     T_RPAREN = 292, 
     T_LBRACK = 293, 
     T_RBRACK = 294, 
-    T_COMMA_DELIM = 295
+    T_COMMA_DELIM = 295, 
+    T_QUIT = 296
   };
 #endif
 
