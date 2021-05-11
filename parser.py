@@ -283,8 +283,8 @@ class Parser(BisonParser):
         ('left', ('T_MUL', 'T_DIV')),
     )
 
-    def read(self, nbytes):
-        return input('I EXIST: ') + '\n'
+    # def read(self, nbytes):
+    #     return input('') + '\n'
 
     start = 'program'
 
@@ -293,7 +293,7 @@ class Parser(BisonParser):
         program : stmt_list T_SEMICOLON
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return program_Node(target=target, 
                                 option=option, 
@@ -325,7 +325,7 @@ class Parser(BisonParser):
             | if_stmt
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return stmt_Node(target=target, 
                                 option=option, 
@@ -337,7 +337,7 @@ class Parser(BisonParser):
         block : T_BEGIN stmt_list T_END
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return block_Node(target=target, 
                                 option=option, 
@@ -352,7 +352,7 @@ class Parser(BisonParser):
             stmt
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return foreach_Node(target=target, 
                                 option=option, 
@@ -379,7 +379,7 @@ class Parser(BisonParser):
         repeat : T_REPEAT stmt_list T_UNTIL l_expr
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return repeat_Node(target=target, 
                                 option=option, 
@@ -393,7 +393,7 @@ class Parser(BisonParser):
             T_ELSE else_stmt
         """
         if 'error' in option:
-            raise BisonSyntaxError
+            raise BisonSyntaxError('ERROR')
         else:
             return if_stmt_Node(target=target, 
                                 option=option, 
@@ -405,27 +405,25 @@ class Parser(BisonParser):
         else_stmt : 
             | T_ELSE stmt
         """
-        try:
-            node = else_stmt_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return else_stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_assignment(self, target, option, names, items):
         """
         assignment : varref T_ASSIGN l_expr
         """
-        try:
-            node = assignment_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return assignment_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_a_expr(self, target, option, names, items):
         """
@@ -433,14 +431,13 @@ class Parser(BisonParser):
             | a_expr T_SUB a_term
             | a_term
         """
-        try:
-            node = a_expr_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return a_expr_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_a_term(self, target, option, names, items):
         """
@@ -448,14 +445,13 @@ class Parser(BisonParser):
             | a_term T_DIV a_fact
             | a_fact
         """
-        try:
-            node = a_term_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return a_term_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_a_fact(self, target, option, names, items):
         """
@@ -465,56 +461,52 @@ class Parser(BisonParser):
             | T_SUB a_fact
             | T_LPAREN a_expr T_RPAREN
         """
-        try:
-            node = a_fact_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return a_fact_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_varref(self, target, option, names, items):
         """
         varref : T_ID 
             | varref T_LBRACK a_expr T_RBRACK
         """
-        try:
-            node = varref_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return varref_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_l_expr(self, target, option, names, items):
         """
         l_expr : l_expr T_AND l_term
             | l_term
         """
-        try:
-            node = l_expr_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return l_expr_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_l_term(self, target, option, names, items):
         """
         l_term : l_term T_OR l_fact
             | l_fact
         """
-        try:
-            node = l_term_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return l_term_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_l_fact(self, target, option, names, items):
         """
@@ -522,14 +514,13 @@ class Parser(BisonParser):
             | a_expr
             | T_LPAREN l_expr T_RPAREN
         """
-        try:
-            node = l_fact_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return l_fact_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_oprel(self, target, option, names, items):
         """
@@ -540,68 +531,63 @@ class Parser(BisonParser):
             | T_EQ
             | T_NEQ
         """
-        try:
-            node = oprel_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return oprel_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_read(self, target, option, names, items):
         """
         read : T_READ varlist
         """
-        try:
-            node = read_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return read_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_write(self, target, option, names, items):
         """
         write : T_WRITE expr_list
         """
-        try:
-            node = write_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return write_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_varlist(self, target, option, names, items):
         """
         varlist : varref
             | varref T_COMMA_DELIM varlist
         """
-        try:
-            node = varlist_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return varlist_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_expr_list(self, target, option, names, items):
         """
         expr_list : a_expr
             | expr_list T_COMMA_DELIM a_expr
         """
-        try:
-            node = expr_list_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return expr_list_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
     
     lexscript = r"""
 %{
@@ -793,5 +779,5 @@ yywrap() { return(1);}
 
 if __name__ == "__main__":
     p = Parser(verbose=0)
-    p.run(debug=1)             # file='inputs/expr1_pass.smp'
+    p.run(file='inputs/expr1_pass.smp', debug=1)             # file='inputs/expr1_pass.smp'
     sys.exit()
