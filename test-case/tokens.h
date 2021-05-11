@@ -44,12 +44,10 @@
   };
 #endif
 
-// #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-// typedef int YYSTYPE;
-// # define YYSTYPE_IS_TRIVIAL 1
-// # define YYSTYPE_IS_DECLARED 1
-// #endif
-
+#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef int YYSTYPE;
+# define YYSTYPE_IS_TRIVIAL 1
+# define YYSTYPE_IS_DECLARED 1
+#endif
 
 extern YYSTYPE yylval;

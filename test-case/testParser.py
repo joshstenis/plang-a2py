@@ -172,10 +172,7 @@ DIGIT [0-9]
 
 %%
 
-\/\/.*$
-[ ]+
-[\t]+
-[\n]+
+[ \t\n]+
 "\+"				{ returntoken(T_ADD); }
 "-"					{ returntoken(T_SUB); }
 "\*"				{ returntoken(T_MUL); }
