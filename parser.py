@@ -276,7 +276,7 @@ class Parser(BisonParser):
     will be generated automatically.
     """
 
-    bisonEngineLibName = 'parser'
+    bisonEngineLibName = 'parser-engine'
 
     tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
     precedences = (('left', ('T_SUB', 'T_ADD')),
@@ -302,21 +302,18 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        return program_Node(target=target, 
+        node = program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        print(node.dump())
+        return node
 
     def on_stmt_list(self, target, option, names, items):
         """
         stmt_list : stmt_list T_SEMICOLON stmt
             | stmt
         """
-        # if option == 0:
-        #     print("Tokens: %s : %s", names[0], names[2])
-        # else:
-        #     print("Tokens: %s", names[0])
-        
         return stmt_list_Node(target=target, 
                             option=option, 
                             names=names, 
@@ -550,8 +547,8 @@ extern void (*py_input)(PyObject *parser, char *buf, int *result, int max_size);
 #define returntoken(tok) yylval = PyUnicode_FromString(strdup(yytext)); return (tok);
 #define YY_INPUT(buf,result,max_size) {(*py_input)(py_parser, buf, &result, max_size);}
 
-//#undef yywrap
-//#define yywrap() 1
+//# undef yywrap
+//# define yywrap() 1
 
 //#undef YY_DECL
 //#define YY_DECL int yylex()
