@@ -177,7 +177,6 @@ DIGIT [0-9]
 "-"					{ returntoken(T_SUB); }
 "\*"				{ returntoken(T_MUL); }
 "/"					{ returntoken(T_DIV); }
-{DIGIT}+[.]{DIGIT}+	                            { returntoken(T_NUM); }
 {DIGIT}+					                    { returntoken(T_NUM); }
 .
 
