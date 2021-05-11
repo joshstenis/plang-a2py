@@ -292,28 +292,26 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        try:
-            node = program_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return program_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_stmt_list(self, target, option, names, items):
         """
         stmt_list : stmt_list T_SEMICOLON stmt
             | stmt
         """
-        try:
-            node = stmt_list_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return stmt_list_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_stmt(self, target, option, names, items):
         """
@@ -326,27 +324,25 @@ class Parser(BisonParser):
             | foreach
             | if_stmt
         """
-        try:
-            node = stmt_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_block(self, target, option, names, items):
         """
         block : T_BEGIN stmt_list T_END
         """
-        try:
-            node = block_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return block_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_foreach(self, target, option, names, items):
         """
@@ -355,14 +351,13 @@ class Parser(BisonParser):
             T_LPAREN a_fact T_COLON a_fact T_RPAREN 
             stmt
         """
-        try:
-            node = foreach_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return foreach_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_while(self, target, option, names, items):
         """
@@ -371,27 +366,25 @@ class Parser(BisonParser):
             stmt_list
             T_END
         """
-        try:
-            node = while_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError('ERROR')
+        else:
+            return while_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_repeat(self, target, option, names, items):
         """
         repeat : T_REPEAT stmt_list T_UNTIL l_expr
         """
-        try:
-            node = repeat_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return repeat_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_if_stmt(self, target, option, names, items):
         """
@@ -399,14 +392,13 @@ class Parser(BisonParser):
             T_THEN stmt_list
             T_ELSE else_stmt
         """
-        try:
-            node = if_stmt_Node(target=target, 
+        if 'error' in option:
+            raise BisonSyntaxError
+        else:
+            return if_stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
-            return node
-        except:
-            raise BisonSyntaxError
 
     def on_else_stmt(self, target, option, names, items):
         """
