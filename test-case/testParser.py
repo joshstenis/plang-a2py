@@ -107,11 +107,12 @@ class Parser(BisonParser):
 
     start = 'program'
 
-    def read(self, nbytes):
-        try:
-            return (input('I EXIST: ') + '\n').encode('utf-8')
-        except EOFError:
-            return ''
+    # Override read method to prompt user input
+    # def read(self, nbytes):
+    #     try:
+    #         return (input('I EXIST: ') + '\n').encode('utf-8')
+    #     except EOFError:
+    #         return ''
 
     def on_program(self, target, option, names, items):
         """
@@ -190,4 +191,5 @@ yywrap() { return(1);}
     """
 
 if __name__ == '__main__':
-    Parser(verbose=1).run(debug=1)              # file='test-inputs.smp'
+    p = Parser(verbose=1)
+    p.run(file='test-inputs.smp', debug=1)              # file='test-inputs.smp'
