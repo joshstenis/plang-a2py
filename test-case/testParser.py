@@ -110,8 +110,7 @@ class Parser(BisonParser):
     # ------------------------------
     # precedences
     # ------------------------------
-    precedences = (
-        )
+    precedences = ()
 
     start = 'program'
 
@@ -119,10 +118,11 @@ class Parser(BisonParser):
         """
         program : a_expr
         """
-        return program_Node(target=target, 
+        node = program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        return node
     
     def on_a_expr(self, target, option, names, items):
         """
@@ -130,10 +130,11 @@ class Parser(BisonParser):
             | a_expr T_SUB a_term
             | a_term
         """
-        return a_expr_Node(target=target, 
+        node = a_expr_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        return node
 
     def on_a_term(self, target, option, names, items):
         """
@@ -141,19 +142,21 @@ class Parser(BisonParser):
             | a_term T_DIV a_fact
             | a_fact
         """
-        return a_term_Node(target=target, 
+        node = a_term_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        return node
     
     def on_a_fact(self, target, option, names, items):
         """
         a_fact : T_NUM
         """
-        return a_fact_Node(target=target, 
+        node = a_fact_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
+        return node
 
     lexscript= r"""
 %{
