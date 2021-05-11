@@ -42,15 +42,15 @@ class ParseNode(BisonNode):
 # Define a node class for each grammar target
 # ------------------------------------------------------
 
-class program_Node(ParseNode):
-    """
-    Holds a "program" parse target and its components.
-    """
-    def __init__(self, **kw):
-        ParseNode.__init__(self, **kw)
+# class program_Node(ParseNode):
+#     """
+#     Holds a "program" parse target and its components.
+#     """
+#     def __init__(self, **kw):
+#         ParseNode.__init__(self, **kw)
 
-    def dump(self, indent=0):
-        ParseNode.dump(self, indent)
+#     def dump(self, indent=0):
+#         ParseNode.dump(self, indent)
 
 class a_expr_Node(ParseNode):
     """
@@ -105,7 +105,7 @@ class Parser(BisonParser):
         ('left', ('T_MUL', 'T_DIV'))
     )
 
-    start = 'program'
+    start = 'a_expr'
 
     # Override read method to prompt user input
     # def read(self, nbytes):
@@ -114,35 +114,28 @@ class Parser(BisonParser):
     #     except EOFError:
     #         return ''
 
-    def on_program(self, target, option, names, items):
-        """
-        program : a_expr
-        """
-        try:
-            node = program_Node(target=target, 
-                            option=option, 
-                            names=names, 
-                            items=items)
-            return node
-        except:
-            raise Exception('I EXIST')
+    # def on_program(self, target, option, names, items):
+    #     """
+    #     program : a_expr
+    #     """
+    #     try:
+    #         node = program_Node(target=target, 
+    #                         option=option, 
+    #                         names=names, 
+    #                         items=items)
+    #         return node
+    #     except:
+    #         raise Exception('I EXIST')
     
     def on_a_expr(self, target, option, names, items):
         """
-        a_expr : T_NUM
-            | a_expr T_ADD a_expr 
+        a_expr : a_expr T_ADD a_expr 
             | a_expr T_SUB a_expr 
             | a_expr T_MUL a_expr 
             | a_expr T_DIV a_expr 
+            | T_NUM
         """
-        try:
-            node = a_expr_Node(target=target, 
-                            option=option, 
-                            names=names, 
-                            items=items)
-            return node
-        except:
-            raise Exception('I EXIST')
+        return
 
     # def on_a_term(self, target, option, names, items):
     #     """
