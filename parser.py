@@ -541,7 +541,7 @@ ALPHA [a-zA-Z]
 \/\/.*$
 [ ]+
 [\t]+
-[\n]+
+[\n]+                   { yylineno++; }
 \".+\"						{ returntoken(T_LITERAL_STR); }
 ";"               { returntoken(T_SEMICOLON); }
 ":="							{ returntoken(T_ASSIGN); }
@@ -589,6 +589,6 @@ yywrap() { return(1);}
     """
 
 if __name__ == "__main__":
-    p = Parser(verbose=0)
+    p = Parser(verbose=1)
     p.run(file='inputs/expr1_pass.smp', debug=1)             # file='inputs/expr1_pass.smp'
     sys.exit()

@@ -1,0 +1,184 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: a_expr
+
+    2 a_expr: a_expr T_ADD a_term
+    3       | a_expr T_SUB a_term
+    4       | a_term
+
+    5 a_term: a_term T_MUL a_fact
+    6       | a_term T_DIV a_fact
+    7       | a_fact
+
+    8 a_fact: T_NUM
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    T_NUM (258) 8
+    T_ADD (259) 2
+    T_SUB (260) 3
+    T_MUL (261) 5
+    T_DIV (262) 6
+
+
+Nonterminals, with rules where they appear
+
+    $accept (8)
+        on left: 0
+    program (9)
+        on left: 1
+        on right: 0
+    a_expr (10)
+        on left: 2 3 4
+        on right: 1 2 3
+    a_term (11)
+        on left: 5 6 7
+        on right: 2 3 4 5 6
+    a_fact (12)
+        on left: 8
+        on right: 5 6 7
+
+
+State 0
+
+    0 $accept: . program $end
+
+    T_NUM  shift, and go to state 1
+
+    program  go to state 2
+    a_expr   go to state 3
+    a_term   go to state 4
+    a_fact   go to state 5
+
+
+State 1
+
+    8 a_fact: T_NUM .
+
+    $default  reduce using rule 8 (a_fact)
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 program: a_expr .
+    2 a_expr: a_expr . T_ADD a_term
+    3       | a_expr . T_SUB a_term
+
+    T_ADD  shift, and go to state 7
+    T_SUB  shift, and go to state 8
+
+    $default  reduce using rule 1 (program)
+
+
+State 4
+
+    4 a_expr: a_term .
+    5 a_term: a_term . T_MUL a_fact
+    6       | a_term . T_DIV a_fact
+
+    T_MUL  shift, and go to state 9
+    T_DIV  shift, and go to state 10
+
+    $default  reduce using rule 4 (a_expr)
+
+
+State 5
+
+    7 a_term: a_fact .
+
+    $default  reduce using rule 7 (a_term)
+
+
+State 6
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 7
+
+    2 a_expr: a_expr T_ADD . a_term
+
+    T_NUM  shift, and go to state 1
+
+    a_term  go to state 11
+    a_fact  go to state 5
+
+
+State 8
+
+    3 a_expr: a_expr T_SUB . a_term
+
+    T_NUM  shift, and go to state 1
+
+    a_term  go to state 12
+    a_fact  go to state 5
+
+
+State 9
+
+    5 a_term: a_term T_MUL . a_fact
+
+    T_NUM  shift, and go to state 1
+
+    a_fact  go to state 13
+
+
+State 10
+
+    6 a_term: a_term T_DIV . a_fact
+
+    T_NUM  shift, and go to state 1
+
+    a_fact  go to state 14
+
+
+State 11
+
+    2 a_expr: a_expr T_ADD a_term .
+    5 a_term: a_term . T_MUL a_fact
+    6       | a_term . T_DIV a_fact
+
+    T_MUL  shift, and go to state 9
+    T_DIV  shift, and go to state 10
+
+    $default  reduce using rule 2 (a_expr)
+
+
+State 12
+
+    3 a_expr: a_expr T_SUB a_term .
+    5 a_term: a_term . T_MUL a_fact
+    6       | a_term . T_DIV a_fact
+
+    T_MUL  shift, and go to state 9
+    T_DIV  shift, and go to state 10
+
+    $default  reduce using rule 3 (a_expr)
+
+
+State 13
+
+    5 a_term: a_term T_MUL a_fact .
+
+    $default  reduce using rule 5 (a_term)
+
+
+State 14
+
+    6 a_term: a_term T_DIV a_fact .
+
+    $default  reduce using rule 6 (a_term)
