@@ -109,7 +109,7 @@ struct YYLTYPE
 
 
 extern YYSTYPE yylval;
-// extern YYLTYPE yylloc;
+extern YYLTYPE yylloc;
 int yyparse (void);
 
 #endif /* !YY_YY_SIMPLE_H_INCLUDED  */
