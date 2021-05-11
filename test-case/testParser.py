@@ -62,15 +62,15 @@ class a_expr_Node(ParseNode):
     def dump(self, indent=0):
         ParseNode.dump(self, indent)
 
-class a_term_Node(ParseNode):
-    """
-    Holds an "a_term" parse target and its components.
-    """
-    def __init__(self, **kw):
-        ParseNode.__init__(self, **kw)
+# class a_term_Node(ParseNode):
+#     """
+#     Holds an "a_term" parse target and its components.
+#     """
+#     def __init__(self, **kw):
+#         ParseNode.__init__(self, **kw)
 
-    def dump(self, indent=0):
-        ParseNode.dump(self, indent)
+#     def dump(self, indent=0):
+#         ParseNode.dump(self, indent)
 
 class Parser(BisonParser):
     """
@@ -100,9 +100,18 @@ class Parser(BisonParser):
     # ------------------------------
     # precedences
     # ------------------------------
-    precedences = ()
+    precedences = (
+        ('left', ('T_SUB', 'T_ADD')), 
+        ('left', ('T_MUL', 'T_DIV'))
+    )
 
     start = 'program'
+
+    def read(self, nbytes):
+        try:
+            return (input('I EXIST: ') + '\n').encode('utf-8')
+        except EOFError:
+            return ''
 
     def on_program(self, target, option, names, items):
         """
@@ -115,13 +124,15 @@ class Parser(BisonParser):
                             items=items)
             return node
         except:
-            raise BisonSyntaxError('ERROR!!')
+            raise Exception('I EXIST')
     
     def on_a_expr(self, target, option, names, items):
         """
-        a_expr : a_expr T_ADD a_term 
-            | a_expr T_SUB a_term
-            | a_term
+        a_expr : T_NUM
+            | a_expr T_ADD a_expr 
+            | a_expr T_SUB a_expr 
+            | a_expr T_MUL a_expr 
+            | a_expr T_DIV a_expr 
         """
         try:
             node = a_expr_Node(target=target, 
@@ -130,22 +141,22 @@ class Parser(BisonParser):
                             items=items)
             return node
         except:
-            raise BisonSyntaxError('ERROR!!')
+            raise Exception('I EXIST')
 
-    def on_a_term(self, target, option, names, items):
-        """
-        a_term : a_term T_MUL T_NUM
-            | a_term T_DIV T_NUM
-            | T_NUM
-        """
-        try:
-            node = a_term_Node(target=target, 
-                            option=option, 
-                            names=names, 
-                            items=items)
-            return node
-        except:
-            raise BisonSyntaxError('ERROR!!')
+    # def on_a_term(self, target, option, names, items):
+    #     """
+    #     a_term : a_term T_MUL T_NUM
+    #         | a_term T_DIV T_NUM
+    #         | T_NUM
+    #     """
+    #     try:
+    #         node = a_term_Node(target=target, 
+    #                         option=option, 
+    #                         names=names, 
+    #                         items=items)
+    #         return node
+    #     except:
+    #         raise Exception('I EXIST')
 
     lexscript= r"""
 %{
@@ -179,4 +190,4 @@ yywrap() { return(1);}
     """
 
 if __name__ == '__main__':
-    Parser(verbose=1).run(file='test-inputs.smp', debug=1)
+    Parser(verbose=1).run(debug=1)              # file='test-inputs.smp'
