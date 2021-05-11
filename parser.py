@@ -292,10 +292,7 @@ class Parser(BisonParser):
         """
         program : stmt_list T_SEMICOLON
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return program_Node(target=target, 
+        return program_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -305,10 +302,7 @@ class Parser(BisonParser):
         stmt_list : stmt_list T_SEMICOLON stmt
             | stmt
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return stmt_list_Node(target=target, 
+        return stmt_list_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -324,10 +318,7 @@ class Parser(BisonParser):
             | foreach
             | if_stmt
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return stmt_Node(target=target, 
+        return stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -336,10 +327,7 @@ class Parser(BisonParser):
         """
         block : T_BEGIN stmt_list T_END
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return block_Node(target=target, 
+        return block_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -351,10 +339,7 @@ class Parser(BisonParser):
             T_LPAREN a_fact T_COLON a_fact T_RPAREN 
             stmt
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return foreach_Node(target=target, 
+        return foreach_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -366,10 +351,7 @@ class Parser(BisonParser):
             stmt_list
             T_END
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return while_Node(target=target, 
+        return while_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -378,10 +360,7 @@ class Parser(BisonParser):
         """
         repeat : T_REPEAT stmt_list T_UNTIL l_expr
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return repeat_Node(target=target, 
+        return repeat_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -392,10 +371,7 @@ class Parser(BisonParser):
             T_THEN stmt_list
             T_ELSE else_stmt
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return if_stmt_Node(target=target, 
+        return if_stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -405,10 +381,7 @@ class Parser(BisonParser):
         else_stmt : 
             | T_ELSE stmt
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return else_stmt_Node(target=target, 
+        return else_stmt_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -417,10 +390,7 @@ class Parser(BisonParser):
         """
         assignment : varref T_ASSIGN l_expr
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return assignment_Node(target=target, 
+        return assignment_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -431,10 +401,7 @@ class Parser(BisonParser):
             | a_expr T_SUB a_term
             | a_term
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return a_expr_Node(target=target, 
+        return a_expr_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -445,10 +412,7 @@ class Parser(BisonParser):
             | a_term T_DIV a_fact
             | a_fact
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return a_term_Node(target=target, 
+        return a_term_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -461,10 +425,7 @@ class Parser(BisonParser):
             | T_SUB a_fact
             | T_LPAREN a_expr T_RPAREN
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return a_fact_Node(target=target, 
+        return a_fact_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -474,10 +435,7 @@ class Parser(BisonParser):
         varref : T_ID 
             | varref T_LBRACK a_expr T_RBRACK
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return varref_Node(target=target, 
+        return varref_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -487,10 +445,7 @@ class Parser(BisonParser):
         l_expr : l_expr T_AND l_term
             | l_term
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return l_expr_Node(target=target, 
+        return l_expr_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -500,10 +455,7 @@ class Parser(BisonParser):
         l_term : l_term T_OR l_fact
             | l_fact
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return l_term_Node(target=target, 
+        return l_term_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -514,10 +466,7 @@ class Parser(BisonParser):
             | a_expr
             | T_LPAREN l_expr T_RPAREN
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return l_fact_Node(target=target, 
+        return l_fact_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -531,10 +480,7 @@ class Parser(BisonParser):
             | T_EQ
             | T_NEQ
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return oprel_Node(target=target, 
+        return oprel_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -543,10 +489,7 @@ class Parser(BisonParser):
         """
         read : T_READ varlist
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return read_Node(target=target, 
+        return read_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -555,23 +498,17 @@ class Parser(BisonParser):
         """
         write : T_WRITE expr_list
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return write_Node(target=target, 
-                                option=option, 
-                                names=names, 
-                                items=items)
+        return write_Node(target=target, 
+                            option=option, 
+                            names=names, 
+                            items=items)
 
     def on_varlist(self, target, option, names, items):
         """
         varlist : varref
             | varref T_COMMA_DELIM varlist
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return varlist_Node(target=target, 
+        return varlist_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -581,10 +518,7 @@ class Parser(BisonParser):
         expr_list : a_expr
             | expr_list T_COMMA_DELIM a_expr
         """
-        if 'error' in option:
-            raise BisonSyntaxError('ERROR')
-        else:
-            return expr_list_Node(target=target, 
+        return expr_list_Node(target=target, 
                                 option=option, 
                                 names=names, 
                                 items=items)
@@ -776,6 +710,6 @@ yywrap() { return(1);}
     """
 
 if __name__ == "__main__":
-    p = Parser(verbose=0)
+    p = Parser(verbose=1)
     p.run(file='inputs/expr1_pass.smp', debug=1)             # file='inputs/expr1_pass.smp'
     sys.exit()
