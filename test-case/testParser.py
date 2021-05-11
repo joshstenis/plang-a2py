@@ -72,16 +72,6 @@ class a_term_Node(ParseNode):
     def dump(self, indent=0):
         ParseNode.dump(self, indent)
 
-class a_fact_Node(ParseNode):
-    """
-    Holds an "a_fact" parse target and its components.
-    """
-    def __init__(self, **kw):
-        ParseNode.__init__(self, **kw)
-
-    def dump(self, indent=0):
-        ParseNode.dump(self, indent)
-
 class Parser(BisonParser):
     """
     bison Parser class generated automatically by bison2py from the
@@ -118,11 +108,14 @@ class Parser(BisonParser):
         """
         program : a_expr
         """
-        node = program_Node(target=target, 
+        try:
+            node = program_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
-        return node
+            return node
+        except:
+            raise BisonSyntaxError('ERROR!!')
     
     def on_a_expr(self, target, option, names, items):
         """
@@ -130,33 +123,29 @@ class Parser(BisonParser):
             | a_expr T_SUB a_term
             | a_term
         """
-        node = a_expr_Node(target=target, 
+        try:
+            node = a_expr_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
-        return node
+            return node
+        except:
+            raise BisonSyntaxError('ERROR!!')
 
     def on_a_term(self, target, option, names, items):
         """
-        a_term : a_term T_MUL a_fact
-            | a_term T_DIV a_fact
-            | a_fact
+        a_term : a_term T_MUL T_NUM
+            | a_term T_DIV T_NUM
+            | T_NUM
         """
-        node = a_term_Node(target=target, 
+        try:
+            node = a_term_Node(target=target, 
                             option=option, 
                             names=names, 
                             items=items)
-        return node
-    
-    def on_a_fact(self, target, option, names, items):
-        """
-        a_fact : T_NUM
-        """
-        node = a_fact_Node(target=target, 
-                            option=option, 
-                            names=names, 
-                            items=items)
-        return node
+            return node
+        except:
+            raise BisonSyntaxError('ERROR!!')
 
     lexscript= r"""
 %{
