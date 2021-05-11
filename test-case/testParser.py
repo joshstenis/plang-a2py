@@ -90,7 +90,7 @@ class Parser(BisonParser):
     # --------------------------------------------
     # basename of binary parser engine dynamic lib
     # --------------------------------------------
-    bisonEngineLibName = 'testParser'
+    # bisonEngineLibName = 'testParser'
 
     # ----------------------------------------------------------------
     # lexer tokens - these must match those in your lex script (below)
