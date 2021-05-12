@@ -591,4 +591,3 @@ yywrap() { return(1);}
 if __name__ == "__main__":
     p = Parser(verbose=1)
     p.run(file='inputs/expr1_pass.smp', debug=1)             # file='inputs/expr1_pass.smp'
-    sys.exit()
