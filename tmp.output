@@ -40,7 +40,7 @@ Grammar
    17 else_stmt: %empty
    18          | T_ELSE stmt
 
-   19 assignment: varref T_ASSIGN l_expr
+   19 assignment: varref ASSIGN l_expr
 
    20 a_expr: a_expr T_ADD a_term
    21       | a_expr T_SUB a_term
@@ -107,7 +107,7 @@ Terminals, with rules where they appear
     T_OR (271) 35
     T_READ (272) 46
     T_WRITE (273) 47
-    T_ASSIGN (274) 19
+    ASSIGN (274) 19
     T_BEGIN (275) 12 14
     T_END (276) 12 14
     T_FOREACH (277) 13
@@ -427,10 +427,10 @@ State 17
 
 State 18
 
-   19 assignment: varref . T_ASSIGN l_expr
+   19 assignment: varref . ASSIGN l_expr
    32 varref: varref . T_LBRACK a_expr T_RBRACK
 
-    T_ASSIGN  shift, and go to state 43
+    ASSIGN    shift, and go to state 43
     T_LBRACK  shift, and go to state 44
 
 
@@ -701,7 +701,7 @@ State 42
 
 State 43
 
-   19 assignment: varref T_ASSIGN . l_expr
+   19 assignment: varref ASSIGN . l_expr
 
     T_ID           shift, and go to state 1
     T_NUM          shift, and go to state 23
@@ -1072,7 +1072,7 @@ State 70
 
 State 71
 
-   19 assignment: varref T_ASSIGN l_expr .
+   19 assignment: varref ASSIGN l_expr .
    33 l_expr: l_expr . T_AND l_term
 
     T_AND  shift, and go to state 59

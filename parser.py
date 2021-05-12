@@ -278,7 +278,7 @@ class Parser(BisonParser):
 
     bisonEngineLibName = 'parser-engine'
 
-    tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'T_ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
+    tokens = ['T_ID', 'T_NUM', 'T_ADD', 'T_SUB', 'T_MUL', 'T_DIV', 'T_LT', 'T_GT', 'T_LEQ', 'T_GEQ', 'T_EQ', 'T_NEQ', 'T_AND', 'T_OR', 'T_READ', 'T_WRITE', 'ASSIGN', 'T_BEGIN', 'T_END', 'T_FOREACH', 'T_IN', 'T_REPEAT', 'T_UNTIL', 'T_WHILE', 'T_IF', 'T_THEN', 'T_ELSE', 'T_DECLARE', 'T_INTEGER', 'T_FLOAT', 'T_LITERAL_STR', 'T_SEMICOLON', 'T_COLON', 'T_LPAREN', 'T_RPAREN', 'T_LBRACK', 'T_RBRACK', 'T_COMMA_DELIM']
     precedences = (('left', ('T_SUB', 'T_ADD')),
         ('left', ('T_MUL', 'T_DIV')),
     )
@@ -385,7 +385,7 @@ class Parser(BisonParser):
 
     def on_assignment(self, target, option, names, items):
         """
-        assignment : varref T_ASSIGN l_expr
+        assignment : varref ASSIGN l_expr
         """
         return assignment_Node(target=target, 
                                 option=option, 
@@ -544,7 +544,7 @@ ALPHA [a-zA-Z]
 [\n]+                   { yylineno++; }
 \".+\"						{ returntoken(T_LITERAL_STR); }
 ";"               { returntoken(T_SEMICOLON); }
-":="							{ returntoken(T_ASSIGN); }
+":="							{ returntoken(ASSIGN); }
 ":"               { returntoken(T_COLON); }
 "("               { returntoken(T_LPAREN); }
 ")"               { returntoken(T_RPAREN); }
@@ -555,12 +555,12 @@ ALPHA [a-zA-Z]
 "-"					{ returntoken(T_SUB); }
 "\*"				{ returntoken(T_MUL); }
 "/"					{ returntoken(T_DIV); }
-"<"				    { returntoken(T_LT); }
-">"					{ returntoken(T_GT); }
+"<>"			    { returntoken(T_NEQ); }
 ">="				{ returntoken(T_GEQ); }
 "<="			    { returntoken(T_LEQ); }
+"<"				    { returntoken(T_LT); }
+">"					{ returntoken(T_GT); }
 "="					{ returntoken(T_EQ); }
-"<>"			    { returntoken(T_NEQ); }
 "and"				{ returntoken(T_AND); }
 "or"				{ returntoken(T_OR); }
 "foreach"			{ returntoken(T_FOREACH); }
@@ -580,7 +580,7 @@ ALPHA [a-zA-Z]
 "declare"			{ returntoken(T_DECLARE); }
 {DIGIT}+[.]{DIGIT}+	                            { returntoken(T_NUM); }
 {DIGIT}+					                    { returntoken(T_NUM);}
-({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*             { returntoken(T_ID); }
+({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*             { printf("\n\nMatch\n\n"); returntoken(T_ID); }
 .
 
 %%
