@@ -61,7 +61,7 @@ extern int yydebug;
     T_OR = 271,
     T_READ = 272,
     T_WRITE = 273,
-    ASSIGN = 274,
+    T_ASSIGN = 274,
     T_BEGIN = 275,
     T_END = 276,
     T_FOREACH = 277,
