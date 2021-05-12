@@ -56,8 +56,8 @@ t_FLOAT = r'float'
 t_REPEAT = r'repeat'
 t_UNTIL = r'until'
 t_DECLARE = r'declare'
-t_NUM = r'{DIGIT}+[.]{DIGIT}+ | {DIGIT}+'
-t_ID = r'({ALPHA}|[_])({DIGIT}|{ALPHA}|[_])*'
+t_NUM = r'[0-9]+[.][0-9]+ | [0-9]+'
+t_ID = r'([a-zA-Z] | [_])([0-9]] | [a-zA-Z] | [_])*'
 
 def t_error(t):
     print('Invalid character: {}'.format(t.value[0]))
@@ -99,7 +99,7 @@ def p_foreach(t):
     '''foreach : FOREACH ID IN LPAREN a_fact COLON a_fact RPAREN  stmt'''
 
 def p_while(t):
-    '''while : WHILE l_expr BEGIN stmt_list END'''
+    '''while : WHILE l_expr block'''
 
 def p_repeat(t):
     '''repeat : REPEAT stmt_list UNTIL l_expr'''
@@ -193,7 +193,7 @@ def p_expr_list(t):
     '''
 
 def p_error(t):
-    print('Syntax error at {}'.format(t.value))
+    print('Syntax error\n')               # at {}'.format(t.value)
 
 import ply.yacc as yacc
 parser = yacc.yacc()
@@ -203,10 +203,11 @@ parser = yacc.yacc()
 # Code executed here
 # ------------------------------------------
 
-while True:
-    try:
-        prgm = open('inputs/expr1_pass.smp', 'rb')
-    except EOFError:
-        break
+# while True:
+#     try:
+#         prgm = input()
+#     except EOFError:
+#         break
 
+prgm = open('inputs/expr1_pass.smp', 'r').read()
 parser.parse(prgm)
