@@ -9,7 +9,7 @@ tokens = (
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
     'AND', 'OR', 
     'READ', 'WRITE', 'ASSIGN', 'BEGIN', 'END', 'FOREACH', 'IN', 'REPEAT', 'UNTIL', 'WHILE', 'IF', 'THEN', 'ELSE', 'LITERAL_STR', 
-    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA_DELIM', 'COMMENT'
+    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA', 'COMMENT'
 )
 
 precedences = [
@@ -32,7 +32,7 @@ t_LPAREN = r'\('
 t_RPAREN =  r'\)'
 t_LBRACK = r'\['
 t_RBRACK = r']'
-t_COMMA_DELIM = r', '
+t_COMMA = r','
 t_ADD = r'\+'
 t_SUB = r'-'
 t_MUL = r'\*'
@@ -167,11 +167,11 @@ def p_oprel(p):
 
 def p_varlist(p):
     '''varlist : varref
-               | varref COMMA_DELIM varlist'''
+               | varref COMMA varlist'''
 
 def p_expr_list(p):
     '''expr_list : a_expr
-                 | expr_list COMMA_DELIM a_expr'''
+                 | expr_list COMMA a_expr'''
 
 def p_error(p):
     print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
