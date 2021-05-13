@@ -9,7 +9,7 @@ tokens = (
     'ADD', 'SUB', 'MUL', 'DIV', 
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
     'FOREACH', 'REPEAT', 'WHILE', 'BEGIN', 'UNTIL', 'WRITE', 'THEN', 'ELSE', 'READ', 'END', 'AND', 'OR', 'IF', 'IN', 
-    'ID', 'NUM'
+    'ID', 'NUM', 'EOF'
 )
 
 # Skips commmented lines
@@ -18,43 +18,76 @@ def t_COMMENT(t):
     t.lexer.lineno += 1
     t.lexer.skip(len(t.value))
 
-t_LITERAL_STR = r'\".+\"'
-t_SEMICOLON = r';'
-t_ASSIGN = r':='
-t_COLON = r':'
-t_LPAREN = r'\('
-t_RPAREN =  r'\)'
-t_LBRACK = r'\['
-t_RBRACK = r']'
-t_COMMA = r','
-t_ADD = r'\+'
-t_SUB = r'-'
-t_MUL = r'\*'
-t_DIV = r'/'
-t_LEQ = r'<='
-t_GEQ = r'>='
-t_LT = r'<'
-t_GT = r'>'
-t_EQ = r'=='
-t_NEQ = r'!='
-t_FOREACH = r'foreach'
-t_REPEAT = r'repeat'
-t_WHILE = r'while'
-t_BEGIN = r'begin'
-t_UNTIL = r'until'
-t_WRITE = r'write'
-t_THEN = r'then'
-t_ELSE = r'else'
-t_READ = r'read'
-t_END = r'end'
-t_AND = r'and'
-t_OR = r'or'
-t_IF = r'if'
-t_IN = r'in'
-t_NUM = r'\d+\.\d+|\d+'
+def t_LITERAL_STR(t):
+    r'\".+\"'
+def t_SEMICOLON(t):
+    r';'
+def t_ASSIGN(t):
+    r':='
+def t_COLON(t):
+    r':'
+def t_LPAREN(t):
+    r'\('
+def t_RPAREN(t):
+    r'\)'
+def t_LBRACK(t):
+    r'\['
+def t_RBRACK(t):
+    r']'
+def t_COMMA(t):
+    r','
+def t_ADD(t):
+    r'\+'
+def t_SUB(t):
+    r'-'
+def t_MUL(t):
+    r'\*'
+def t_DIV(t):
+    r'/'
+def t_LEQ(t):
+    r'<='
+def t_GEQ(t):
+    r'>='
+def t_LT(t):
+    r'<'
+def t_GT(t):
+    r'>'
+def t_EQ(t):
+    r'=='
+def t_NEQ(t):
+    r'!='
+def t_FOREACH(t):
+    r'foreach'
+def t_REPEAT(t):
+    r'repeat'
+def t_WHILE(t):
+    r'while'
+def t_BEGIN(t):
+    r'begin'
+def t_UNTIL(t):
+    r'until'
+def t_WRITE(t):
+    r'write'
+def t_THEN(t):
+    r'then'
+def t_ELSE(t):
+    r'else'
+def t_READ(t):
+    r'read'
+def t_END(t):
+    r'end'
+def t_AND(t):
+    r'and'
+def t_OR(t):
+    r'or'
+def t_IF(t):
+    r'if'
+def t_IN(t):
+    r'in'
+def t_NUM(t):
+    r'\d+\.\d+|\d+'
 def t_ID(t):
     r'[a-zA-Z_]\w*'
-    print('ID Found: {}'.format(t.value))
 
 t_ignore = ' \t'
 
@@ -85,7 +118,7 @@ def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
 def p_stmt_list(p):
-    '''stmt_list : stmt_list SEMICOLON stmt_list 
+    '''stmt_list : stmt_list SEMICOLON stmt
                  | stmt'''
 
 def p_stmt(p):
@@ -171,7 +204,10 @@ def p_expr_list(p):
                  | expr_list COMMA a_expr'''
 
 def p_error(p):
-    print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
+    if p == None:
+        print('End of file reached.')
+    else:
+        print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
 
 import ply.yacc as yacc
 parser = yacc.yacc()

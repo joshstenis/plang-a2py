@@ -3,12 +3,13 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     COMMENT
+    EOF
 
 Grammar
 
 Rule 0     S' -> program
 Rule 1     program -> stmt_list SEMICOLON
-Rule 2     stmt_list -> stmt_list SEMICOLON stmt_list
+Rule 2     stmt_list -> stmt_list SEMICOLON stmt
 Rule 3     stmt_list -> stmt
 Rule 4     stmt -> assignment
 Rule 5     stmt -> read
@@ -69,6 +70,7 @@ COMMENT              :
 DIV                  : 31
 ELSE                 : 19 20
 END                  : 17
+EOF                  : 
 EQ                   : 44
 FOREACH              : 18
 GEQ                  : 43
@@ -113,8 +115,8 @@ oprel                : 36
 program              : 0
 read                 : 5
 repeat               : 8
-stmt                 : 3 18 20
-stmt_list            : 1 2 2 16 17 19
+stmt                 : 2 3 18 20
+stmt_list            : 1 2 16 17 19
 varlist              : 13 46 46
 varref               : 12 25 32 47
 while                : 7
@@ -126,7 +128,7 @@ state 0
 
     (0) S' -> . program
     (1) program -> . stmt_list SEMICOLON
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
+    (2) stmt_list -> . stmt_list SEMICOLON stmt
     (3) stmt_list -> . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
@@ -178,7 +180,7 @@ state 1
 state 2
 
     (1) program -> stmt_list . SEMICOLON
-    (2) stmt_list -> stmt_list . SEMICOLON stmt_list
+    (2) stmt_list -> stmt_list . SEMICOLON stmt
 
     SEMICOLON       shift and go to state 21
 
@@ -348,7 +350,7 @@ state 15
 state 16
 
     (16) repeat -> REPEAT . stmt_list UNTIL l_expr
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
+    (2) stmt_list -> . stmt_list SEMICOLON stmt
     (3) stmt_list -> . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
@@ -393,7 +395,7 @@ state 16
 state 17
 
     (17) block -> BEGIN . stmt_list END
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
+    (2) stmt_list -> . stmt_list SEMICOLON stmt
     (3) stmt_list -> . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
@@ -501,9 +503,7 @@ state 20
 state 21
 
     (1) program -> stmt_list SEMICOLON .
-    (2) stmt_list -> stmt_list SEMICOLON . stmt_list
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
-    (3) stmt_list -> . stmt
+    (2) stmt_list -> stmt_list SEMICOLON . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
     (6) stmt -> . write
@@ -533,8 +533,7 @@ state 21
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt_list                      shift and go to state 40
-    stmt                           shift and go to state 3
+    stmt                           shift and go to state 40
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -868,7 +867,7 @@ state 35
 state 36
 
     (16) repeat -> REPEAT stmt_list . UNTIL l_expr
-    (2) stmt_list -> stmt_list . SEMICOLON stmt_list
+    (2) stmt_list -> stmt_list . SEMICOLON stmt
 
     UNTIL           shift and go to state 65
     SEMICOLON       shift and go to state 66
@@ -877,7 +876,7 @@ state 36
 state 37
 
     (17) block -> BEGIN stmt_list . END
-    (2) stmt_list -> stmt_list . SEMICOLON stmt_list
+    (2) stmt_list -> stmt_list . SEMICOLON stmt
 
     END             shift and go to state 67
     SEMICOLON       shift and go to state 66
@@ -919,16 +918,12 @@ state 39
 
 state 40
 
-    (2) stmt_list -> stmt_list SEMICOLON stmt_list .
-    (2) stmt_list -> stmt_list . SEMICOLON stmt_list
+    (2) stmt_list -> stmt_list SEMICOLON stmt .
 
-  ! shift/reduce conflict for SEMICOLON resolved as shift
-    UNTIL           reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt_list .)
-    END             reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt_list .)
-    ELSE            reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt_list .)
-    SEMICOLON       shift and go to state 66
-
-  ! SEMICOLON       [ reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt_list .) ]
+    SEMICOLON       reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
+    UNTIL           reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
+    END             reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
+    ELSE            reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
 
 
 state 41
@@ -1371,9 +1366,7 @@ state 65
 
 state 66
 
-    (2) stmt_list -> stmt_list SEMICOLON . stmt_list
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
-    (3) stmt_list -> . stmt
+    (2) stmt_list -> stmt_list SEMICOLON . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
     (6) stmt -> . write
@@ -1402,8 +1395,7 @@ state 66
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt_list                      shift and go to state 40
-    stmt                           shift and go to state 3
+    stmt                           shift and go to state 40
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -1434,7 +1426,7 @@ state 68
 state 69
 
     (19) if_stmt -> IF l_expr THEN . stmt_list ELSE else_stmt
-    (2) stmt_list -> . stmt_list SEMICOLON stmt_list
+    (2) stmt_list -> . stmt_list SEMICOLON stmt
     (3) stmt_list -> . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
@@ -1788,7 +1780,7 @@ state 79
 state 80
 
     (19) if_stmt -> IF l_expr THEN stmt_list . ELSE else_stmt
-    (2) stmt_list -> stmt_list . SEMICOLON stmt_list
+    (2) stmt_list -> stmt_list . SEMICOLON stmt
 
     ELSE            shift and go to state 82
     SEMICOLON       shift and go to state 66
@@ -1981,7 +1973,6 @@ state 89
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for SEMICOLON in state 40 resolved as shift
 WARNING: shift/reduce conflict for ADD in state 50 resolved as shift
 WARNING: shift/reduce conflict for SUB in state 50 resolved as shift
 WARNING: shift/reduce conflict for MUL in state 50 resolved as shift
