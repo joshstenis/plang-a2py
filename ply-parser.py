@@ -12,6 +12,11 @@ tokens = (
     'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA_DELIM', 'COMMENT'
 )
 
+# Skips commmented lines
+def t_COMMENT(t):
+    r'\".+\"'
+    t.lexer.lineno += 1
+
 t_LITERAL_STR = r'\".+\"'
 t_SEMICOLON = r';'
 t_ASSIGN = r':='
@@ -25,43 +30,38 @@ t_ADD = r'\+'
 t_SUB = r'-'
 t_MUL = r'\*'
 t_DIV = r'/'
-t_LT = r'<'
-t_GT = r'>'
 t_LEQ = r'<='
 t_GEQ = r'>='
+t_LT = r'<'
+t_GT = r'>'
 t_EQ = r'=='
 t_NEQ = r'!='
-t_AND = r'and'
-t_OR = r'or'
 t_FOREACH = r'foreach'
-t_IN = r'in'
+t_REPEAT = r'repeat'
 t_WHILE = r'while'
 t_BEGIN = r'begin'
-t_END = r'end'
-t_IF = r'if'
+t_UNTIL = r'until'
+t_WRITE = r'write'
 t_THEN = r'then'
 t_ELSE = r'else'
-t_WRITE = r'write'
 t_READ = r'read'
-t_REPEAT = r'repeat'
-t_UNTIL = r'until'
+t_END = r'end'
+t_AND = r'and'
+t_OR = r'or'
+t_IF = r'if'
+t_IN = r'in'
 t_NUM = r'\d+\.\d+|\d+'
-t_ID = r'([a-zA-Z_])\w*'
+t_ID = r'[a-zA-Z_]\w*'
 
 t_ignore = ' \t'
 
 # Skips newline characters and updates t.lexer.lineno
 def t_newline(t):
     r'\n+'
-    t.lexer.lineno += t.value.count()
-
-# Skips commmented lines
-def t_COMMENT(t):
-    r'\".+\"'
-    t.lexer.lineno += 1
+    t.lexer.lineno += t.value.count('\n')
 
 def t_error(t):
-    pass
+    print('Illegal character: ({0}, {1})'.format(t.type, t.value))
 
 import ply.lex as lex
 lexer = lex.lex()
