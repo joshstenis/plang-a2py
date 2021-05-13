@@ -5,12 +5,11 @@
 # -----------------------------------------------------------------------------
 
 tokens = (
-    'COMMENT', 
-    'ID', 'NUM', 'ADD', 'SUB', 'MUL', 'DIV', 
+    'COMMENT', 'LITERAL_STR', 'SEMICOLON', 'ASSIGN', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA', 
+    'ADD', 'SUB', 'MUL', 'DIV', 
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
-    'AND', 'OR', 
-    'READ', 'WRITE', 'ASSIGN', 'BEGIN', 'END', 'FOREACH', 'IN', 'REPEAT', 'UNTIL', 'WHILE', 'IF', 'THEN', 'ELSE', 'LITERAL_STR', 
-    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA'
+    'FOREACH', 'REPEAT', 'WHILE', 'BEGIN', 'UNTIL', 'WRITE', 'THEN', 'ELSE', 'READ', 'END', 'AND', 'OR', 'IF', 'IN', 
+    'ID', 'NUM'
 )
 
 # Skips commmented lines
@@ -53,7 +52,9 @@ t_OR = r'or'
 t_IF = r'if'
 t_IN = r'in'
 t_NUM = r'\d+\.\d+|\d+'
-t_ID = r'[a-zA-Z_]\w*'
+def t_ID(t):
+    r'[a-zA-Z_]\w*'
+    print('ID Found: {}'.format(t.value))
 
 t_ignore = ' \t'
 
@@ -77,14 +78,14 @@ precedences = [
     ('left', 'OR'), 
     ('left', 'AND'), 
     ('left', ('SUB', 'ADD')),
-    ('left', ('MUL', 'DIV')),
+    ('left', ('MUL', 'DIV'))
 ]
 
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
 def p_stmt_list(p):
-    '''stmt_list : stmt_list SEMICOLON stmt 
+    '''stmt_list : stmt_list SEMICOLON stmt_list 
                  | stmt'''
 
 def p_stmt(p):
@@ -128,8 +129,8 @@ def p_else_stmt(p):
 def p_a_expr(p):
     '''a_expr : a_expr a_op a_expr
               | SUB a_expr 
-              | varref
               | NUM 
+              | varref
               | LITERAL_STR 
               | LPAREN a_expr RPAREN'''
 
@@ -140,14 +141,14 @@ def p_a_op(p):
             | DIV'''
 
 def p_varref(p):
-    '''varref : ID 
-              | varref LBRACK a_expr RBRACK'''
+    '''varref : varref LBRACK a_expr RBRACK 
+              | ID'''
 
 def p_l_expr(p):
-    '''l_expr : l_expr l_op l_expr
-              | l_expr oprel a_expr
-              | a_expr
-              | LPAREN l_expr RPAREN'''
+    '''l_expr : LPAREN l_expr RPAREN 
+              | l_expr l_op l_expr
+              | l_expr oprel l_expr
+              | a_expr'''
 
 def p_l_op(p):
     '''l_op : OR 
@@ -173,7 +174,7 @@ def p_error(p):
     print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
 
 import ply.yacc as yacc
-parser = yacc.yacc(method='LALR')
+parser = yacc.yacc()
 
 
 # ------------------------------------------
