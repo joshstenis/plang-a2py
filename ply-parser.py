@@ -1,24 +1,17 @@
 # -----------------------------------------------------------------------------
-# PLang Assignment 2 Parser
+# Programming Assignment #2 Parser
 #
-# Encapsulates grammar (.y) and scanner (.yy) files
+# Author: Josh Stenis
 # -----------------------------------------------------------------------------
-
 
 tokens = (
     'ID', 'NUM', 'ADD', 'SUB', 'MUL', 'DIV', 
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
     'AND', 'OR', 
     'READ', 'WRITE', 'ASSIGN', 'BEGIN', 'END', 'FOREACH', 'IN', 'REPEAT', 'UNTIL', 'WHILE', 'IF', 'THEN', 'ELSE', 'LITERAL_STR', 
-    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA_DELIM'
+    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA_DELIM', 'COMMENT'
 )
 
-
-# ------------------------------------------
-# Scanner rules defined below
-# ------------------------------------------
-
-t_ignore = ' \t\n'
 t_LITERAL_STR = r'\".+\"'
 t_SEMICOLON = r';'
 t_ASSIGN = r':='
@@ -55,9 +48,19 @@ t_UNTIL = r'until'
 t_NUM = r'\d+\.\d+|\d+'
 t_ID = r'([a-zA-Z_])\w*'
 
+t_ignore = ' \t'
+
+# Skips newline characters and updates t.lexer.lineno
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count()
+
+# Skips commmented lines
+def t_COMMENT(t):
+    r'\".+\"'
+    t.lexer.lineno += 1
+
 def t_error(t):
-    # print('Invalid character: {}'.format(t.value[0]))
-    # t.lexer.skip(1)
     pass
 
 import ply.lex as lex
@@ -164,7 +167,7 @@ def p_expr_list(t):
         | expr_list COMMA_DELIM a_expr'''
 
 def p_error(t):
-    print('Syntax error: {}\n'.format(t))               # at {}'.format(t.value)
+    print('Parsing error: "{0}" at line {1}'.format(t, t.lexer.lineno))
 
 import ply.yacc as yacc
 parser = yacc.yacc()
