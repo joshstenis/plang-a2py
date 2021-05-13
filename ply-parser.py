@@ -13,13 +13,6 @@ tokens = (
     'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA'
 )
 
-precedences = [
-    ('left', 'OR'), 
-    ('left', 'AND'), 
-    ('left', ('SUB', 'ADD')),
-    ('left', ('MUL', 'DIV')),
-]
-
 # Skips commmented lines
 def t_COMMENT(t):
     r'\/\/.*$'
@@ -80,6 +73,13 @@ lexer = lex.lex()
 # Grammar rules defined below
 # ------------------------------------------
 
+precedences = [
+    ('left', 'OR'), 
+    ('left', 'AND'), 
+    ('left', ('SUB', 'ADD')),
+    ('left', ('MUL', 'DIV')),
+]
+
 def p_program(p):
     '''program : stmt_list SEMICOLON'''
 
@@ -116,7 +116,7 @@ def p_block(p):
     '''block : BEGIN stmt_list END'''
 
 def p_foreach(p):
-    '''foreach : FOREACH ID IN LPAREN a_fact COLON a_fact RPAREN stmt'''
+    '''foreach : FOREACH ID IN LPAREN a_expr COLON a_expr RPAREN stmt'''
 
 def p_if_stmt(p):
     '''if_stmt : IF l_expr THEN stmt_list ELSE else_stmt'''
@@ -126,21 +126,18 @@ def p_else_stmt(p):
                  | ELSE stmt'''
 
 def p_a_expr(p):
-    '''a_expr : a_expr ADD a_term
-              | a_expr SUB a_term
-              | a_term'''
-
-def p_a_term(p):
-    '''a_term : a_term MUL a_fact
-              | a_term DIV a_fact
-              | a_fact'''
-
-def p_a_fact(p):
-    '''a_fact : varref 
+    '''a_expr : a_expr a_op a_expr
+              | SUB a_expr 
+              | varref
               | NUM 
               | LITERAL_STR 
-              | SUB a_fact 
               | LPAREN a_expr RPAREN'''
+
+def p_a_op(p):
+    '''a_op : ADD 
+            | SUB 
+            | MUL 
+            | DIV'''
 
 def p_varref(p):
     '''varref : ID 
