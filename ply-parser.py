@@ -21,7 +21,7 @@ precedences = [
 
 # Skips commmented lines
 def t_COMMENT(t):
-    r'\".+\"'
+    r'\/\/.*$'
     t.lexer.lineno += 1
 
 t_LITERAL_STR = r'\".+\"'
