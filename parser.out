@@ -1,11 +1,5 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
-Unused terminals:
-
-    DECLARE
-    FLOAT
-    INTEGER
-
 Grammar
 
 Rule 0     S' -> program
@@ -69,19 +63,16 @@ ASSIGN               : 19
 BEGIN                : 12
 COLON                : 13
 COMMA_DELIM          : 49 51
-DECLARE              : 
 DIV                  : 24
 ELSE                 : 16 18
 END                  : 12
 EQ                   : 44
-FLOAT                : 
 FOREACH              : 13
 GEQ                  : 43
 GT                   : 41
 ID                   : 13 31
 IF                   : 16
 IN                   : 13
-INTEGER              : 
 LBRACK               : 32
 LEQ                  : 42
 LITERAL_STR          : 28
