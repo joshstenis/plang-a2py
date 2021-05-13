@@ -167,7 +167,7 @@ def p_expr_list(t):
         | expr_list COMMA_DELIM a_expr'''
 
 def p_error(t):
-    print('Parsing error: "{0}" at line {1}'.format(t, t.lexer.lineno))
+    print('Parsing error: ({0}, \'{1}\') at line {2}'.format(t.type, t.value, t.lexer.lineno))
 
 import ply.yacc as yacc
 parser = yacc.yacc()
