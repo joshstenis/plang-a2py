@@ -5,11 +5,12 @@
 # -----------------------------------------------------------------------------
 
 tokens = (
+    'COMMENT', 
     'ID', 'NUM', 'ADD', 'SUB', 'MUL', 'DIV', 
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
     'AND', 'OR', 
     'READ', 'WRITE', 'ASSIGN', 'BEGIN', 'END', 'FOREACH', 'IN', 'REPEAT', 'UNTIL', 'WHILE', 'IF', 'THEN', 'ELSE', 'LITERAL_STR', 
-    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA', 'COMMENT'
+    'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA'
 )
 
 precedences = [
@@ -23,6 +24,7 @@ precedences = [
 def t_COMMENT(t):
     r'\/\/.*$'
     t.lexer.lineno += 1
+    t.lexer.skip(len(t.value))
 
 t_LITERAL_STR = r'\".+\"'
 t_SEMICOLON = r';'
@@ -185,4 +187,4 @@ parser = yacc.yacc()
 # ------------------------------------------
 
 prgm = open('inputs/{}.smp'.format(input('File: ')), 'r').read()
-parser.parse(prgm)
+parser.parse(prgm, lexer=lexer)
