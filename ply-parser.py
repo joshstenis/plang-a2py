@@ -179,7 +179,7 @@ def p_error(p):
     print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
 
 import ply.yacc as yacc
-parser = yacc.yacc()
+parser = yacc.yacc(method='LALR')
 
 
 # ------------------------------------------
