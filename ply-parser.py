@@ -188,11 +188,11 @@ def p_foreach(p):
     '''foreach : FOREACH ID IN LPAREN a_expr COLON a_expr RPAREN stmt'''
 
 def p_if_stmt(p):
-    '''if_stmt : IF l_expr THEN stmt_list ELSE else_stmt'''
+    '''if_stmt : IF l_expr THEN stmt_list else_stmt'''
 
 def p_else_stmt(p):
-    '''else_stmt : ELSE stmt
-                 | '''
+    '''else_stmt : 
+                 | ELSE stmt'''
 
 def p_a_expr(p):
     '''a_expr : a_expr a_op a_expr
@@ -215,7 +215,7 @@ def p_varref(p):
 def p_l_expr(p):
     '''l_expr : LPAREN l_expr RPAREN 
               | l_expr l_op l_expr
-              | l_expr oprel l_expr
+              | l_expr oprel a_expr
               | a_expr'''
 
 def p_l_op(p):
@@ -240,9 +240,9 @@ def p_expr_list(p):
 
 def p_error(p):
     if p == None:
-        print('End of file reached.')
+        print('Missing symbol.')
     else:
-        print('Parsing error: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
+        print('Incorrect symbol: ({0}, \'{1}\') at line {2}'.format(p.type, p.value, p.lexer.lineno))
 
 import ply.yacc as yacc
 parser = yacc.yacc()
