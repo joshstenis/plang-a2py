@@ -26,8 +26,8 @@ Rule 16    repeat -> REPEAT stmt_list UNTIL l_expr
 Rule 17    block -> BEGIN stmt_list END
 Rule 18    foreach -> FOREACH ID IN LPAREN a_expr COLON a_expr RPAREN stmt
 Rule 19    if_stmt -> IF l_expr THEN stmt_list ELSE else_stmt
-Rule 20    else_stmt -> <empty>
-Rule 21    else_stmt -> ELSE stmt
+Rule 20    else_stmt -> ELSE stmt
+Rule 21    else_stmt -> <empty>
 Rule 22    a_expr -> a_expr a_op a_expr
 Rule 23    a_expr -> SUB a_expr
 Rule 24    a_expr -> varref
@@ -40,56 +40,55 @@ Rule 30    a_op -> MUL
 Rule 31    a_op -> DIV
 Rule 32    varref -> ID
 Rule 33    varref -> varref LBRACK a_expr RBRACK
-Rule 34    l_expr -> l_expr AND l_term
-Rule 35    l_expr -> l_term
-Rule 36    l_term -> l_term OR l_fact
-Rule 37    l_term -> l_fact
-Rule 38    l_fact -> l_fact oprel a_expr
-Rule 39    l_fact -> a_expr
-Rule 40    l_fact -> LPAREN l_expr RPAREN
-Rule 41    oprel -> LT
-Rule 42    oprel -> GT
-Rule 43    oprel -> LEQ
-Rule 44    oprel -> GEQ
-Rule 45    oprel -> EQ
-Rule 46    oprel -> NEQ
+Rule 34    l_expr -> l_expr l_op l_expr
+Rule 35    l_expr -> l_expr oprel a_expr
+Rule 36    l_expr -> a_expr
+Rule 37    l_expr -> LPAREN l_expr RPAREN
+Rule 38    l_op -> OR
+Rule 39    l_op -> AND
+Rule 40    oprel -> LT
+Rule 41    oprel -> GT
+Rule 42    oprel -> LEQ
+Rule 43    oprel -> GEQ
+Rule 44    oprel -> EQ
+Rule 45    oprel -> NEQ
+Rule 46    varlist -> varlist COMMA varlist
 Rule 47    varlist -> varref
-Rule 48    varlist -> varref COMMA varlist
-Rule 49    expr_list -> a_expr
-Rule 50    expr_list -> expr_list COMMA a_expr
+Rule 48    expr_list -> a_expr
+Rule 49    expr_list -> expr_list COMMA a_expr
 
 Terminals, with rules where they appear
 
 ADD                  : 28
-AND                  : 34
+AND                  : 39
 ASSIGN               : 12
 BEGIN                : 17
 COLON                : 18
-COMMA                : 48 50
+COMMA                : 46 49
 COMMENT              : 
 DIV                  : 31
-ELSE                 : 19 21
+ELSE                 : 19 20
 END                  : 17
-EQ                   : 45
+EQ                   : 44
 FOREACH              : 18
-GEQ                  : 44
-GT                   : 42
+GEQ                  : 43
+GT                   : 41
 ID                   : 18 32
 IF                   : 19
 IN                   : 18
 LBRACK               : 33
-LEQ                  : 43
+LEQ                  : 42
 LITERAL_STR          : 26
-LPAREN               : 18 27 40
-LT                   : 41
+LPAREN               : 18 27 37
+LT                   : 40
 MUL                  : 30
-NEQ                  : 46
+NEQ                  : 45
 NUM                  : 25
-OR                   : 36
+OR                   : 38
 RBRACK               : 33
 READ                 : 13
 REPEAT               : 16
-RPAREN               : 18 27 40
+RPAREN               : 18 27 37
 SEMICOLON            : 1 2
 SUB                  : 23 29
 THEN                 : 19
@@ -100,25 +99,24 @@ error                :
 
 Nonterminals, with rules where they appear
 
-a_expr               : 18 18 22 22 23 27 33 38 39 49 50
+a_expr               : 18 18 22 22 23 27 33 35 36 48 49
 a_op                 : 22
 assignment           : 4
 block                : 9 15
 else_stmt            : 19
-expr_list            : 14 50
+expr_list            : 14 49
 foreach              : 10
 if_stmt              : 11
-l_expr               : 12 15 16 19 34 40
-l_fact               : 36 37 38
-l_term               : 34 35 36
-oprel                : 38
+l_expr               : 12 15 16 19 34 34 35 37
+l_op                 : 34
+oprel                : 35
 program              : 0
 read                 : 5
 repeat               : 8
-stmt                 : 2 3 18 21
+stmt                 : 2 3 18 20
 stmt_list            : 1 2 16 17 19
-varlist              : 13 48
-varref               : 12 24 33 47 48
+varlist              : 13 46 46
+varref               : 12 24 33 47
 while                : 7
 write                : 6
 
@@ -287,8 +285,8 @@ state 12
 state 13
 
     (13) read -> READ . varlist
+    (46) varlist -> . varlist COMMA varlist
     (47) varlist -> . varref
-    (48) varlist -> . varref COMMA varlist
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
@@ -300,8 +298,8 @@ state 13
 state 14
 
     (14) write -> WRITE . expr_list
-    (49) expr_list -> . a_expr
-    (50) expr_list -> . expr_list COMMA a_expr
+    (48) expr_list -> . a_expr
+    (49) expr_list -> . expr_list COMMA a_expr
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -324,13 +322,10 @@ state 14
 state 15
 
     (15) while -> WHILE . l_expr block
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -340,16 +335,14 @@ state 15
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
     ID              shift and go to state 19
 
     l_expr                         shift and go to state 33
-    l_term                         shift and go to state 34
-    l_fact                         shift and go to state 35
-    a_expr                         shift and go to state 36
+    a_expr                         shift and go to state 34
     varref                         shift and go to state 29
 
 state 16
@@ -385,7 +378,7 @@ state 16
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt_list                      shift and go to state 38
+    stmt_list                      shift and go to state 36
     stmt                           shift and go to state 3
     assignment                     shift and go to state 4
     read                           shift and go to state 5
@@ -430,7 +423,7 @@ state 17
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt_list                      shift and go to state 39
+    stmt_list                      shift and go to state 37
     stmt                           shift and go to state 3
     assignment                     shift and go to state 4
     read                           shift and go to state 5
@@ -446,7 +439,7 @@ state 18
 
     (18) foreach -> FOREACH . ID IN LPAREN a_expr COLON a_expr RPAREN stmt
 
-    ID              shift and go to state 40
+    ID              shift and go to state 38
 
 
 state 19
@@ -464,15 +457,15 @@ state 19
     SUB             reduce using rule 32 (varref -> ID .)
     MUL             reduce using rule 32 (varref -> ID .)
     DIV             reduce using rule 32 (varref -> ID .)
+    BEGIN           reduce using rule 32 (varref -> ID .)
+    OR              reduce using rule 32 (varref -> ID .)
+    AND             reduce using rule 32 (varref -> ID .)
     LT              reduce using rule 32 (varref -> ID .)
     GT              reduce using rule 32 (varref -> ID .)
     LEQ             reduce using rule 32 (varref -> ID .)
     GEQ             reduce using rule 32 (varref -> ID .)
     EQ              reduce using rule 32 (varref -> ID .)
     NEQ             reduce using rule 32 (varref -> ID .)
-    OR              reduce using rule 32 (varref -> ID .)
-    AND             reduce using rule 32 (varref -> ID .)
-    BEGIN           reduce using rule 32 (varref -> ID .)
     THEN            reduce using rule 32 (varref -> ID .)
     RBRACK          reduce using rule 32 (varref -> ID .)
     RPAREN          reduce using rule 32 (varref -> ID .)
@@ -482,13 +475,10 @@ state 19
 state 20
 
     (19) if_stmt -> IF . l_expr THEN stmt_list ELSE else_stmt
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -498,16 +488,14 @@ state 20
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
     ID              shift and go to state 19
 
-    l_expr                         shift and go to state 41
-    l_term                         shift and go to state 34
-    l_fact                         shift and go to state 35
-    a_expr                         shift and go to state 36
+    l_expr                         shift and go to state 39
+    a_expr                         shift and go to state 34
     varref                         shift and go to state 29
 
 state 21
@@ -543,7 +531,7 @@ state 21
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt                           shift and go to state 42
+    stmt                           shift and go to state 40
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -557,13 +545,10 @@ state 21
 state 22
 
     (12) assignment -> varref ASSIGN . l_expr
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -573,17 +558,15 @@ state 22
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
     ID              shift and go to state 19
 
     varref                         shift and go to state 29
-    l_expr                         shift and go to state 43
-    l_term                         shift and go to state 34
-    l_fact                         shift and go to state 35
-    a_expr                         shift and go to state 36
+    l_expr                         shift and go to state 41
+    a_expr                         shift and go to state 34
 
 state 23
 
@@ -604,64 +587,65 @@ state 23
     ID              shift and go to state 19
 
     varref                         shift and go to state 29
-    a_expr                         shift and go to state 44
+    a_expr                         shift and go to state 42
 
 state 24
 
     (13) read -> READ varlist .
+    (46) varlist -> varlist . COMMA varlist
 
     SEMICOLON       reduce using rule 13 (read -> READ varlist .)
     UNTIL           reduce using rule 13 (read -> READ varlist .)
     END             reduce using rule 13 (read -> READ varlist .)
     ELSE            reduce using rule 13 (read -> READ varlist .)
+    COMMA           shift and go to state 43
 
 
 state 25
 
     (47) varlist -> varref .
-    (48) varlist -> varref . COMMA varlist
     (33) varref -> varref . LBRACK a_expr RBRACK
 
+    COMMA           reduce using rule 47 (varlist -> varref .)
     SEMICOLON       reduce using rule 47 (varlist -> varref .)
     UNTIL           reduce using rule 47 (varlist -> varref .)
     END             reduce using rule 47 (varlist -> varref .)
     ELSE            reduce using rule 47 (varlist -> varref .)
-    COMMA           shift and go to state 45
     LBRACK          shift and go to state 23
 
 
 state 26
 
     (14) write -> WRITE expr_list .
-    (50) expr_list -> expr_list . COMMA a_expr
+    (49) expr_list -> expr_list . COMMA a_expr
 
     SEMICOLON       reduce using rule 14 (write -> WRITE expr_list .)
     UNTIL           reduce using rule 14 (write -> WRITE expr_list .)
     END             reduce using rule 14 (write -> WRITE expr_list .)
     ELSE            reduce using rule 14 (write -> WRITE expr_list .)
-    COMMA           shift and go to state 46
+    COMMA           shift and go to state 44
 
 
 state 27
 
-    (49) expr_list -> a_expr .
+    (48) expr_list -> a_expr .
     (22) a_expr -> a_expr . a_op a_expr
     (28) a_op -> . ADD
     (29) a_op -> . SUB
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    COMMA           reduce using rule 49 (expr_list -> a_expr .)
-    SEMICOLON       reduce using rule 49 (expr_list -> a_expr .)
-    UNTIL           reduce using rule 49 (expr_list -> a_expr .)
-    END             reduce using rule 49 (expr_list -> a_expr .)
-    ELSE            reduce using rule 49 (expr_list -> a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    COMMA           reduce using rule 48 (expr_list -> a_expr .)
+    SEMICOLON       reduce using rule 48 (expr_list -> a_expr .)
+    UNTIL           reduce using rule 48 (expr_list -> a_expr .)
+    END             reduce using rule 48 (expr_list -> a_expr .)
+    ELSE            reduce using rule 48 (expr_list -> a_expr .)
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
 state 28
 
@@ -681,7 +665,7 @@ state 28
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 52
+    a_expr                         shift and go to state 50
     varref                         shift and go to state 29
 
 state 29
@@ -698,15 +682,15 @@ state 29
     UNTIL           reduce using rule 24 (a_expr -> varref .)
     END             reduce using rule 24 (a_expr -> varref .)
     ELSE            reduce using rule 24 (a_expr -> varref .)
+    BEGIN           reduce using rule 24 (a_expr -> varref .)
+    OR              reduce using rule 24 (a_expr -> varref .)
+    AND             reduce using rule 24 (a_expr -> varref .)
     LT              reduce using rule 24 (a_expr -> varref .)
     GT              reduce using rule 24 (a_expr -> varref .)
     LEQ             reduce using rule 24 (a_expr -> varref .)
     GEQ             reduce using rule 24 (a_expr -> varref .)
     EQ              reduce using rule 24 (a_expr -> varref .)
     NEQ             reduce using rule 24 (a_expr -> varref .)
-    OR              reduce using rule 24 (a_expr -> varref .)
-    AND             reduce using rule 24 (a_expr -> varref .)
-    BEGIN           reduce using rule 24 (a_expr -> varref .)
     THEN            reduce using rule 24 (a_expr -> varref .)
     RBRACK          reduce using rule 24 (a_expr -> varref .)
     RPAREN          reduce using rule 24 (a_expr -> varref .)
@@ -727,15 +711,15 @@ state 30
     UNTIL           reduce using rule 25 (a_expr -> NUM .)
     END             reduce using rule 25 (a_expr -> NUM .)
     ELSE            reduce using rule 25 (a_expr -> NUM .)
+    BEGIN           reduce using rule 25 (a_expr -> NUM .)
+    OR              reduce using rule 25 (a_expr -> NUM .)
+    AND             reduce using rule 25 (a_expr -> NUM .)
     LT              reduce using rule 25 (a_expr -> NUM .)
     GT              reduce using rule 25 (a_expr -> NUM .)
     LEQ             reduce using rule 25 (a_expr -> NUM .)
     GEQ             reduce using rule 25 (a_expr -> NUM .)
     EQ              reduce using rule 25 (a_expr -> NUM .)
     NEQ             reduce using rule 25 (a_expr -> NUM .)
-    OR              reduce using rule 25 (a_expr -> NUM .)
-    AND             reduce using rule 25 (a_expr -> NUM .)
-    BEGIN           reduce using rule 25 (a_expr -> NUM .)
     THEN            reduce using rule 25 (a_expr -> NUM .)
     RBRACK          reduce using rule 25 (a_expr -> NUM .)
     RPAREN          reduce using rule 25 (a_expr -> NUM .)
@@ -755,15 +739,15 @@ state 31
     UNTIL           reduce using rule 26 (a_expr -> LITERAL_STR .)
     END             reduce using rule 26 (a_expr -> LITERAL_STR .)
     ELSE            reduce using rule 26 (a_expr -> LITERAL_STR .)
+    BEGIN           reduce using rule 26 (a_expr -> LITERAL_STR .)
+    OR              reduce using rule 26 (a_expr -> LITERAL_STR .)
+    AND             reduce using rule 26 (a_expr -> LITERAL_STR .)
     LT              reduce using rule 26 (a_expr -> LITERAL_STR .)
     GT              reduce using rule 26 (a_expr -> LITERAL_STR .)
     LEQ             reduce using rule 26 (a_expr -> LITERAL_STR .)
     GEQ             reduce using rule 26 (a_expr -> LITERAL_STR .)
     EQ              reduce using rule 26 (a_expr -> LITERAL_STR .)
     NEQ             reduce using rule 26 (a_expr -> LITERAL_STR .)
-    OR              reduce using rule 26 (a_expr -> LITERAL_STR .)
-    AND             reduce using rule 26 (a_expr -> LITERAL_STR .)
-    BEGIN           reduce using rule 26 (a_expr -> LITERAL_STR .)
     THEN            reduce using rule 26 (a_expr -> LITERAL_STR .)
     RBRACK          reduce using rule 26 (a_expr -> LITERAL_STR .)
     RPAREN          reduce using rule 26 (a_expr -> LITERAL_STR .)
@@ -788,163 +772,149 @@ state 32
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 53
+    a_expr                         shift and go to state 51
     varref                         shift and go to state 29
 
 state 33
 
     (15) while -> WHILE l_expr . block
-    (34) l_expr -> l_expr . AND l_term
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
     (17) block -> . BEGIN stmt_list END
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
-    AND             shift and go to state 55
     BEGIN           shift and go to state 17
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
-    block                          shift and go to state 54
+    block                          shift and go to state 52
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
 state 34
 
-    (35) l_expr -> l_term .
-    (36) l_term -> l_term . OR l_fact
-
-    AND             reduce using rule 35 (l_expr -> l_term .)
-    BEGIN           reduce using rule 35 (l_expr -> l_term .)
-    THEN            reduce using rule 35 (l_expr -> l_term .)
-    SEMICOLON       reduce using rule 35 (l_expr -> l_term .)
-    UNTIL           reduce using rule 35 (l_expr -> l_term .)
-    END             reduce using rule 35 (l_expr -> l_term .)
-    ELSE            reduce using rule 35 (l_expr -> l_term .)
-    RPAREN          reduce using rule 35 (l_expr -> l_term .)
-    OR              shift and go to state 56
-
-
-state 35
-
-    (37) l_term -> l_fact .
-    (38) l_fact -> l_fact . oprel a_expr
-    (41) oprel -> . LT
-    (42) oprel -> . GT
-    (43) oprel -> . LEQ
-    (44) oprel -> . GEQ
-    (45) oprel -> . EQ
-    (46) oprel -> . NEQ
-
-    OR              reduce using rule 37 (l_term -> l_fact .)
-    AND             reduce using rule 37 (l_term -> l_fact .)
-    BEGIN           reduce using rule 37 (l_term -> l_fact .)
-    THEN            reduce using rule 37 (l_term -> l_fact .)
-    SEMICOLON       reduce using rule 37 (l_term -> l_fact .)
-    UNTIL           reduce using rule 37 (l_term -> l_fact .)
-    END             reduce using rule 37 (l_term -> l_fact .)
-    ELSE            reduce using rule 37 (l_term -> l_fact .)
-    RPAREN          reduce using rule 37 (l_term -> l_fact .)
-    LT              shift and go to state 58
-    GT              shift and go to state 59
-    LEQ             shift and go to state 60
-    GEQ             shift and go to state 61
-    EQ              shift and go to state 62
-    NEQ             shift and go to state 63
-
-    oprel                          shift and go to state 57
-
-state 36
-
-    (39) l_fact -> a_expr .
+    (36) l_expr -> a_expr .
     (22) a_expr -> a_expr . a_op a_expr
     (28) a_op -> . ADD
     (29) a_op -> . SUB
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    LT              reduce using rule 39 (l_fact -> a_expr .)
-    GT              reduce using rule 39 (l_fact -> a_expr .)
-    LEQ             reduce using rule 39 (l_fact -> a_expr .)
-    GEQ             reduce using rule 39 (l_fact -> a_expr .)
-    EQ              reduce using rule 39 (l_fact -> a_expr .)
-    NEQ             reduce using rule 39 (l_fact -> a_expr .)
-    OR              reduce using rule 39 (l_fact -> a_expr .)
-    AND             reduce using rule 39 (l_fact -> a_expr .)
-    BEGIN           reduce using rule 39 (l_fact -> a_expr .)
-    THEN            reduce using rule 39 (l_fact -> a_expr .)
-    SEMICOLON       reduce using rule 39 (l_fact -> a_expr .)
-    UNTIL           reduce using rule 39 (l_fact -> a_expr .)
-    END             reduce using rule 39 (l_fact -> a_expr .)
-    ELSE            reduce using rule 39 (l_fact -> a_expr .)
-    RPAREN          reduce using rule 39 (l_fact -> a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    BEGIN           reduce using rule 36 (l_expr -> a_expr .)
+    OR              reduce using rule 36 (l_expr -> a_expr .)
+    AND             reduce using rule 36 (l_expr -> a_expr .)
+    LT              reduce using rule 36 (l_expr -> a_expr .)
+    GT              reduce using rule 36 (l_expr -> a_expr .)
+    LEQ             reduce using rule 36 (l_expr -> a_expr .)
+    GEQ             reduce using rule 36 (l_expr -> a_expr .)
+    EQ              reduce using rule 36 (l_expr -> a_expr .)
+    NEQ             reduce using rule 36 (l_expr -> a_expr .)
+    THEN            reduce using rule 36 (l_expr -> a_expr .)
+    SEMICOLON       reduce using rule 36 (l_expr -> a_expr .)
+    UNTIL           reduce using rule 36 (l_expr -> a_expr .)
+    END             reduce using rule 36 (l_expr -> a_expr .)
+    ELSE            reduce using rule 36 (l_expr -> a_expr .)
+    RPAREN          reduce using rule 36 (l_expr -> a_expr .)
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 37
+state 35
 
-    (40) l_fact -> LPAREN . l_expr RPAREN
+    (37) l_expr -> LPAREN . l_expr RPAREN
     (27) a_expr -> LPAREN . a_expr RPAREN
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
     (25) a_expr -> . NUM
     (26) a_expr -> . LITERAL_STR
     (27) a_expr -> . LPAREN a_expr RPAREN
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
 
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
-    LPAREN          shift and go to state 64
     ID              shift and go to state 19
 
-    l_expr                         shift and go to state 65
-    a_expr                         shift and go to state 66
-    l_term                         shift and go to state 34
+    l_expr                         shift and go to state 63
+    a_expr                         shift and go to state 64
     varref                         shift and go to state 29
-    l_fact                         shift and go to state 35
 
-state 38
+state 36
 
     (16) repeat -> REPEAT stmt_list . UNTIL l_expr
     (2) stmt_list -> stmt_list . SEMICOLON stmt
 
-    UNTIL           shift and go to state 67
-    SEMICOLON       shift and go to state 68
+    UNTIL           shift and go to state 65
+    SEMICOLON       shift and go to state 66
 
 
-state 39
+state 37
 
     (17) block -> BEGIN stmt_list . END
     (2) stmt_list -> stmt_list . SEMICOLON stmt
 
-    END             shift and go to state 69
-    SEMICOLON       shift and go to state 68
+    END             shift and go to state 67
+    SEMICOLON       shift and go to state 66
 
 
-state 40
+state 38
 
     (18) foreach -> FOREACH ID . IN LPAREN a_expr COLON a_expr RPAREN stmt
 
-    IN              shift and go to state 70
+    IN              shift and go to state 68
 
 
-state 41
+state 39
 
     (19) if_stmt -> IF l_expr . THEN stmt_list ELSE else_stmt
-    (34) l_expr -> l_expr . AND l_term
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
-    THEN            shift and go to state 71
-    AND             shift and go to state 55
+    THEN            shift and go to state 69
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
-state 42
+state 40
 
     (2) stmt_list -> stmt_list SEMICOLON stmt .
 
@@ -954,19 +924,37 @@ state 42
     ELSE            reduce using rule 2 (stmt_list -> stmt_list SEMICOLON stmt .)
 
 
-state 43
+state 41
 
     (12) assignment -> varref ASSIGN l_expr .
-    (34) l_expr -> l_expr . AND l_term
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
     SEMICOLON       reduce using rule 12 (assignment -> varref ASSIGN l_expr .)
     UNTIL           reduce using rule 12 (assignment -> varref ASSIGN l_expr .)
     END             reduce using rule 12 (assignment -> varref ASSIGN l_expr .)
     ELSE            reduce using rule 12 (assignment -> varref ASSIGN l_expr .)
-    AND             shift and go to state 55
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
-state 44
+state 42
 
     (33) varref -> varref LBRACK a_expr . RBRACK
     (22) a_expr -> a_expr . a_op a_expr
@@ -975,30 +963,30 @@ state 44
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    RBRACK          shift and go to state 72
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    RBRACK          shift and go to state 70
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 45
+state 43
 
-    (48) varlist -> varref COMMA . varlist
+    (46) varlist -> varlist COMMA . varlist
+    (46) varlist -> . varlist COMMA varlist
     (47) varlist -> . varref
-    (48) varlist -> . varref COMMA varlist
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
     ID              shift and go to state 19
 
+    varlist                        shift and go to state 71
     varref                         shift and go to state 25
-    varlist                        shift and go to state 73
 
-state 46
+state 44
 
-    (50) expr_list -> expr_list COMMA . a_expr
+    (49) expr_list -> expr_list COMMA . a_expr
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -1014,10 +1002,10 @@ state 46
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 74
+    a_expr                         shift and go to state 72
     varref                         shift and go to state 29
 
-state 47
+state 45
 
     (22) a_expr -> a_expr a_op . a_expr
     (22) a_expr -> . a_expr a_op a_expr
@@ -1035,10 +1023,10 @@ state 47
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 75
+    a_expr                         shift and go to state 73
     varref                         shift and go to state 29
 
-state 48
+state 46
 
     (28) a_op -> ADD .
 
@@ -1049,7 +1037,7 @@ state 48
     ID              reduce using rule 28 (a_op -> ADD .)
 
 
-state 49
+state 47
 
     (29) a_op -> SUB .
 
@@ -1060,7 +1048,7 @@ state 49
     ID              reduce using rule 29 (a_op -> SUB .)
 
 
-state 50
+state 48
 
     (30) a_op -> MUL .
 
@@ -1071,7 +1059,7 @@ state 50
     ID              reduce using rule 30 (a_op -> MUL .)
 
 
-state 51
+state 49
 
     (31) a_op -> DIV .
 
@@ -1082,7 +1070,7 @@ state 51
     ID              reduce using rule 31 (a_op -> DIV .)
 
 
-state 52
+state 50
 
     (23) a_expr -> SUB a_expr .
     (22) a_expr -> a_expr . a_op a_expr
@@ -1100,32 +1088,32 @@ state 52
     UNTIL           reduce using rule 23 (a_expr -> SUB a_expr .)
     END             reduce using rule 23 (a_expr -> SUB a_expr .)
     ELSE            reduce using rule 23 (a_expr -> SUB a_expr .)
+    BEGIN           reduce using rule 23 (a_expr -> SUB a_expr .)
+    OR              reduce using rule 23 (a_expr -> SUB a_expr .)
+    AND             reduce using rule 23 (a_expr -> SUB a_expr .)
     LT              reduce using rule 23 (a_expr -> SUB a_expr .)
     GT              reduce using rule 23 (a_expr -> SUB a_expr .)
     LEQ             reduce using rule 23 (a_expr -> SUB a_expr .)
     GEQ             reduce using rule 23 (a_expr -> SUB a_expr .)
     EQ              reduce using rule 23 (a_expr -> SUB a_expr .)
     NEQ             reduce using rule 23 (a_expr -> SUB a_expr .)
-    OR              reduce using rule 23 (a_expr -> SUB a_expr .)
-    AND             reduce using rule 23 (a_expr -> SUB a_expr .)
-    BEGIN           reduce using rule 23 (a_expr -> SUB a_expr .)
     THEN            reduce using rule 23 (a_expr -> SUB a_expr .)
     RBRACK          reduce using rule 23 (a_expr -> SUB a_expr .)
     RPAREN          reduce using rule 23 (a_expr -> SUB a_expr .)
     COLON           reduce using rule 23 (a_expr -> SUB a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
   ! ADD             [ reduce using rule 23 (a_expr -> SUB a_expr .) ]
   ! SUB             [ reduce using rule 23 (a_expr -> SUB a_expr .) ]
   ! MUL             [ reduce using rule 23 (a_expr -> SUB a_expr .) ]
   ! DIV             [ reduce using rule 23 (a_expr -> SUB a_expr .) ]
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 53
+state 51
 
     (27) a_expr -> LPAREN a_expr . RPAREN
     (22) a_expr -> a_expr . a_op a_expr
@@ -1134,15 +1122,15 @@ state 53
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    RPAREN          shift and go to state 76
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    RPAREN          shift and go to state 74
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 54
+state 52
 
     (15) while -> WHILE l_expr block .
 
@@ -1152,14 +1140,13 @@ state 54
     ELSE            reduce using rule 15 (while -> WHILE l_expr block .)
 
 
-state 55
+state 53
 
-    (34) l_expr -> l_expr AND . l_term
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
+    (34) l_expr -> l_expr l_op . l_expr
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -1169,45 +1156,19 @@ state 55
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
     ID              shift and go to state 19
 
-    l_term                         shift and go to state 77
-    l_fact                         shift and go to state 35
-    a_expr                         shift and go to state 36
+    l_expr                         shift and go to state 75
+    a_expr                         shift and go to state 34
     varref                         shift and go to state 29
 
-state 56
+state 54
 
-    (36) l_term -> l_term OR . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
-    (22) a_expr -> . a_expr a_op a_expr
-    (23) a_expr -> . SUB a_expr
-    (24) a_expr -> . varref
-    (25) a_expr -> . NUM
-    (26) a_expr -> . LITERAL_STR
-    (27) a_expr -> . LPAREN a_expr RPAREN
-    (32) varref -> . ID
-    (33) varref -> . varref LBRACK a_expr RBRACK
-
-    LPAREN          shift and go to state 37
-    SUB             shift and go to state 28
-    NUM             shift and go to state 30
-    LITERAL_STR     shift and go to state 31
-    ID              shift and go to state 19
-
-    l_fact                         shift and go to state 78
-    a_expr                         shift and go to state 36
-    varref                         shift and go to state 29
-
-state 57
-
-    (38) l_fact -> l_fact oprel . a_expr
+    (35) l_expr -> l_expr oprel . a_expr
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -1223,155 +1184,160 @@ state 57
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 79
+    a_expr                         shift and go to state 76
     varref                         shift and go to state 29
+
+state 55
+
+    (38) l_op -> OR .
+
+    LPAREN          reduce using rule 38 (l_op -> OR .)
+    SUB             reduce using rule 38 (l_op -> OR .)
+    NUM             reduce using rule 38 (l_op -> OR .)
+    LITERAL_STR     reduce using rule 38 (l_op -> OR .)
+    ID              reduce using rule 38 (l_op -> OR .)
+
+
+state 56
+
+    (39) l_op -> AND .
+
+    LPAREN          reduce using rule 39 (l_op -> AND .)
+    SUB             reduce using rule 39 (l_op -> AND .)
+    NUM             reduce using rule 39 (l_op -> AND .)
+    LITERAL_STR     reduce using rule 39 (l_op -> AND .)
+    ID              reduce using rule 39 (l_op -> AND .)
+
+
+state 57
+
+    (40) oprel -> LT .
+
+    SUB             reduce using rule 40 (oprel -> LT .)
+    NUM             reduce using rule 40 (oprel -> LT .)
+    LITERAL_STR     reduce using rule 40 (oprel -> LT .)
+    LPAREN          reduce using rule 40 (oprel -> LT .)
+    ID              reduce using rule 40 (oprel -> LT .)
+
 
 state 58
 
-    (41) oprel -> LT .
+    (41) oprel -> GT .
 
-    SUB             reduce using rule 41 (oprel -> LT .)
-    NUM             reduce using rule 41 (oprel -> LT .)
-    LITERAL_STR     reduce using rule 41 (oprel -> LT .)
-    LPAREN          reduce using rule 41 (oprel -> LT .)
-    ID              reduce using rule 41 (oprel -> LT .)
+    SUB             reduce using rule 41 (oprel -> GT .)
+    NUM             reduce using rule 41 (oprel -> GT .)
+    LITERAL_STR     reduce using rule 41 (oprel -> GT .)
+    LPAREN          reduce using rule 41 (oprel -> GT .)
+    ID              reduce using rule 41 (oprel -> GT .)
 
 
 state 59
 
-    (42) oprel -> GT .
+    (42) oprel -> LEQ .
 
-    SUB             reduce using rule 42 (oprel -> GT .)
-    NUM             reduce using rule 42 (oprel -> GT .)
-    LITERAL_STR     reduce using rule 42 (oprel -> GT .)
-    LPAREN          reduce using rule 42 (oprel -> GT .)
-    ID              reduce using rule 42 (oprel -> GT .)
+    SUB             reduce using rule 42 (oprel -> LEQ .)
+    NUM             reduce using rule 42 (oprel -> LEQ .)
+    LITERAL_STR     reduce using rule 42 (oprel -> LEQ .)
+    LPAREN          reduce using rule 42 (oprel -> LEQ .)
+    ID              reduce using rule 42 (oprel -> LEQ .)
 
 
 state 60
 
-    (43) oprel -> LEQ .
+    (43) oprel -> GEQ .
 
-    SUB             reduce using rule 43 (oprel -> LEQ .)
-    NUM             reduce using rule 43 (oprel -> LEQ .)
-    LITERAL_STR     reduce using rule 43 (oprel -> LEQ .)
-    LPAREN          reduce using rule 43 (oprel -> LEQ .)
-    ID              reduce using rule 43 (oprel -> LEQ .)
+    SUB             reduce using rule 43 (oprel -> GEQ .)
+    NUM             reduce using rule 43 (oprel -> GEQ .)
+    LITERAL_STR     reduce using rule 43 (oprel -> GEQ .)
+    LPAREN          reduce using rule 43 (oprel -> GEQ .)
+    ID              reduce using rule 43 (oprel -> GEQ .)
 
 
 state 61
 
-    (44) oprel -> GEQ .
+    (44) oprel -> EQ .
 
-    SUB             reduce using rule 44 (oprel -> GEQ .)
-    NUM             reduce using rule 44 (oprel -> GEQ .)
-    LITERAL_STR     reduce using rule 44 (oprel -> GEQ .)
-    LPAREN          reduce using rule 44 (oprel -> GEQ .)
-    ID              reduce using rule 44 (oprel -> GEQ .)
+    SUB             reduce using rule 44 (oprel -> EQ .)
+    NUM             reduce using rule 44 (oprel -> EQ .)
+    LITERAL_STR     reduce using rule 44 (oprel -> EQ .)
+    LPAREN          reduce using rule 44 (oprel -> EQ .)
+    ID              reduce using rule 44 (oprel -> EQ .)
 
 
 state 62
 
-    (45) oprel -> EQ .
+    (45) oprel -> NEQ .
 
-    SUB             reduce using rule 45 (oprel -> EQ .)
-    NUM             reduce using rule 45 (oprel -> EQ .)
-    LITERAL_STR     reduce using rule 45 (oprel -> EQ .)
-    LPAREN          reduce using rule 45 (oprel -> EQ .)
-    ID              reduce using rule 45 (oprel -> EQ .)
+    SUB             reduce using rule 45 (oprel -> NEQ .)
+    NUM             reduce using rule 45 (oprel -> NEQ .)
+    LITERAL_STR     reduce using rule 45 (oprel -> NEQ .)
+    LPAREN          reduce using rule 45 (oprel -> NEQ .)
+    ID              reduce using rule 45 (oprel -> NEQ .)
 
 
 state 63
 
-    (46) oprel -> NEQ .
+    (37) l_expr -> LPAREN l_expr . RPAREN
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
-    SUB             reduce using rule 46 (oprel -> NEQ .)
-    NUM             reduce using rule 46 (oprel -> NEQ .)
-    LITERAL_STR     reduce using rule 46 (oprel -> NEQ .)
-    LPAREN          reduce using rule 46 (oprel -> NEQ .)
-    ID              reduce using rule 46 (oprel -> NEQ .)
+    RPAREN          shift and go to state 77
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
 state 64
 
-    (27) a_expr -> LPAREN . a_expr RPAREN
-    (40) l_fact -> LPAREN . l_expr RPAREN
-    (22) a_expr -> . a_expr a_op a_expr
-    (23) a_expr -> . SUB a_expr
-    (24) a_expr -> . varref
-    (25) a_expr -> . NUM
-    (26) a_expr -> . LITERAL_STR
-    (27) a_expr -> . LPAREN a_expr RPAREN
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
-    (32) varref -> . ID
-    (33) varref -> . varref LBRACK a_expr RBRACK
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
-
-    SUB             shift and go to state 28
-    NUM             shift and go to state 30
-    LITERAL_STR     shift and go to state 31
-    LPAREN          shift and go to state 64
-    ID              shift and go to state 19
-
-    a_expr                         shift and go to state 66
-    l_expr                         shift and go to state 65
-    varref                         shift and go to state 29
-    l_term                         shift and go to state 34
-    l_fact                         shift and go to state 35
-
-state 65
-
-    (40) l_fact -> LPAREN l_expr . RPAREN
-    (34) l_expr -> l_expr . AND l_term
-
-    RPAREN          shift and go to state 80
-    AND             shift and go to state 55
-
-
-state 66
-
     (27) a_expr -> LPAREN a_expr . RPAREN
+    (36) l_expr -> a_expr .
     (22) a_expr -> a_expr . a_op a_expr
-    (39) l_fact -> a_expr .
     (28) a_op -> . ADD
     (29) a_op -> . SUB
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
   ! shift/reduce conflict for RPAREN resolved as shift
-    RPAREN          shift and go to state 76
-    LT              reduce using rule 39 (l_fact -> a_expr .)
-    GT              reduce using rule 39 (l_fact -> a_expr .)
-    LEQ             reduce using rule 39 (l_fact -> a_expr .)
-    GEQ             reduce using rule 39 (l_fact -> a_expr .)
-    EQ              reduce using rule 39 (l_fact -> a_expr .)
-    NEQ             reduce using rule 39 (l_fact -> a_expr .)
-    OR              reduce using rule 39 (l_fact -> a_expr .)
-    AND             reduce using rule 39 (l_fact -> a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    RPAREN          shift and go to state 74
+    OR              reduce using rule 36 (l_expr -> a_expr .)
+    AND             reduce using rule 36 (l_expr -> a_expr .)
+    LT              reduce using rule 36 (l_expr -> a_expr .)
+    GT              reduce using rule 36 (l_expr -> a_expr .)
+    LEQ             reduce using rule 36 (l_expr -> a_expr .)
+    GEQ             reduce using rule 36 (l_expr -> a_expr .)
+    EQ              reduce using rule 36 (l_expr -> a_expr .)
+    NEQ             reduce using rule 36 (l_expr -> a_expr .)
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-  ! RPAREN          [ reduce using rule 39 (l_fact -> a_expr .) ]
+  ! RPAREN          [ reduce using rule 36 (l_expr -> a_expr .) ]
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 67
+state 65
 
     (16) repeat -> REPEAT stmt_list UNTIL . l_expr
-    (34) l_expr -> . l_expr AND l_term
-    (35) l_expr -> . l_term
-    (36) l_term -> . l_term OR l_fact
-    (37) l_term -> . l_fact
-    (38) l_fact -> . l_fact oprel a_expr
-    (39) l_fact -> . a_expr
-    (40) l_fact -> . LPAREN l_expr RPAREN
+    (34) l_expr -> . l_expr l_op l_expr
+    (35) l_expr -> . l_expr oprel a_expr
+    (36) l_expr -> . a_expr
+    (37) l_expr -> . LPAREN l_expr RPAREN
     (22) a_expr -> . a_expr a_op a_expr
     (23) a_expr -> . SUB a_expr
     (24) a_expr -> . varref
@@ -1381,19 +1347,17 @@ state 67
     (32) varref -> . ID
     (33) varref -> . varref LBRACK a_expr RBRACK
 
-    LPAREN          shift and go to state 37
+    LPAREN          shift and go to state 35
     SUB             shift and go to state 28
     NUM             shift and go to state 30
     LITERAL_STR     shift and go to state 31
     ID              shift and go to state 19
 
-    l_expr                         shift and go to state 81
-    l_term                         shift and go to state 34
-    l_fact                         shift and go to state 35
-    a_expr                         shift and go to state 36
+    l_expr                         shift and go to state 78
+    a_expr                         shift and go to state 34
     varref                         shift and go to state 29
 
-state 68
+state 66
 
     (2) stmt_list -> stmt_list SEMICOLON . stmt
     (4) stmt -> . assignment
@@ -1424,7 +1388,7 @@ state 68
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt                           shift and go to state 42
+    stmt                           shift and go to state 40
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -1435,7 +1399,7 @@ state 68
     if_stmt                        shift and go to state 11
     varref                         shift and go to state 12
 
-state 69
+state 67
 
     (17) block -> BEGIN stmt_list END .
 
@@ -1445,14 +1409,14 @@ state 69
     ELSE            reduce using rule 17 (block -> BEGIN stmt_list END .)
 
 
-state 70
+state 68
 
     (18) foreach -> FOREACH ID IN . LPAREN a_expr COLON a_expr RPAREN stmt
 
-    LPAREN          shift and go to state 82
+    LPAREN          shift and go to state 79
 
 
-state 71
+state 69
 
     (19) if_stmt -> IF l_expr THEN . stmt_list ELSE else_stmt
     (2) stmt_list -> . stmt_list SEMICOLON stmt
@@ -1485,7 +1449,7 @@ state 71
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt_list                      shift and go to state 83
+    stmt_list                      shift and go to state 80
     stmt                           shift and go to state 3
     assignment                     shift and go to state 4
     read                           shift and go to state 5
@@ -1497,7 +1461,7 @@ state 71
     if_stmt                        shift and go to state 11
     varref                         shift and go to state 12
 
-state 72
+state 70
 
     (33) varref -> varref LBRACK a_expr RBRACK .
 
@@ -1512,53 +1476,58 @@ state 72
     SUB             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     MUL             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     DIV             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
+    BEGIN           reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
+    OR              reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
+    AND             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     LT              reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     GT              reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     LEQ             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     GEQ             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     EQ              reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     NEQ             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
-    OR              reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
-    AND             reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
-    BEGIN           reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     THEN            reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     RBRACK          reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     RPAREN          reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
     COLON           reduce using rule 33 (varref -> varref LBRACK a_expr RBRACK .)
 
 
-state 73
+state 71
 
-    (48) varlist -> varref COMMA varlist .
+    (46) varlist -> varlist COMMA varlist .
+    (46) varlist -> varlist . COMMA varlist
 
-    SEMICOLON       reduce using rule 48 (varlist -> varref COMMA varlist .)
-    UNTIL           reduce using rule 48 (varlist -> varref COMMA varlist .)
-    END             reduce using rule 48 (varlist -> varref COMMA varlist .)
-    ELSE            reduce using rule 48 (varlist -> varref COMMA varlist .)
+  ! shift/reduce conflict for COMMA resolved as shift
+    SEMICOLON       reduce using rule 46 (varlist -> varlist COMMA varlist .)
+    UNTIL           reduce using rule 46 (varlist -> varlist COMMA varlist .)
+    END             reduce using rule 46 (varlist -> varlist COMMA varlist .)
+    ELSE            reduce using rule 46 (varlist -> varlist COMMA varlist .)
+    COMMA           shift and go to state 43
+
+  ! COMMA           [ reduce using rule 46 (varlist -> varlist COMMA varlist .) ]
 
 
-state 74
+state 72
 
-    (50) expr_list -> expr_list COMMA a_expr .
+    (49) expr_list -> expr_list COMMA a_expr .
     (22) a_expr -> a_expr . a_op a_expr
     (28) a_op -> . ADD
     (29) a_op -> . SUB
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    COMMA           reduce using rule 50 (expr_list -> expr_list COMMA a_expr .)
-    SEMICOLON       reduce using rule 50 (expr_list -> expr_list COMMA a_expr .)
-    UNTIL           reduce using rule 50 (expr_list -> expr_list COMMA a_expr .)
-    END             reduce using rule 50 (expr_list -> expr_list COMMA a_expr .)
-    ELSE            reduce using rule 50 (expr_list -> expr_list COMMA a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    COMMA           reduce using rule 49 (expr_list -> expr_list COMMA a_expr .)
+    SEMICOLON       reduce using rule 49 (expr_list -> expr_list COMMA a_expr .)
+    UNTIL           reduce using rule 49 (expr_list -> expr_list COMMA a_expr .)
+    END             reduce using rule 49 (expr_list -> expr_list COMMA a_expr .)
+    ELSE            reduce using rule 49 (expr_list -> expr_list COMMA a_expr .)
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 75
+state 73
 
     (22) a_expr -> a_expr a_op a_expr .
     (22) a_expr -> a_expr . a_op a_expr
@@ -1576,32 +1545,32 @@ state 75
     UNTIL           reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     END             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     ELSE            reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
+    BEGIN           reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
+    OR              reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
+    AND             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     LT              reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     GT              reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     LEQ             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     GEQ             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     EQ              reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     NEQ             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
-    OR              reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
-    AND             reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
-    BEGIN           reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     THEN            reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     RBRACK          reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     RPAREN          reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
     COLON           reduce using rule 22 (a_expr -> a_expr a_op a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
   ! ADD             [ reduce using rule 22 (a_expr -> a_expr a_op a_expr .) ]
   ! SUB             [ reduce using rule 22 (a_expr -> a_expr a_op a_expr .) ]
   ! MUL             [ reduce using rule 22 (a_expr -> a_expr a_op a_expr .) ]
   ! DIV             [ reduce using rule 22 (a_expr -> a_expr a_op a_expr .) ]
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 76
+state 74
 
     (27) a_expr -> LPAREN a_expr RPAREN .
 
@@ -1614,131 +1583,154 @@ state 76
     UNTIL           reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     END             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     ELSE            reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
+    BEGIN           reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
+    OR              reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
+    AND             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     LT              reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     GT              reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     LEQ             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     GEQ             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     EQ              reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     NEQ             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
-    OR              reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
-    AND             reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
-    BEGIN           reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     THEN            reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     RBRACK          reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     RPAREN          reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
     COLON           reduce using rule 27 (a_expr -> LPAREN a_expr RPAREN .)
 
 
-state 77
+state 75
 
-    (34) l_expr -> l_expr AND l_term .
-    (36) l_term -> l_term . OR l_fact
+    (34) l_expr -> l_expr l_op l_expr .
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
-    AND             reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    BEGIN           reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    THEN            reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    SEMICOLON       reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    UNTIL           reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    END             reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    ELSE            reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    RPAREN          reduce using rule 34 (l_expr -> l_expr AND l_term .)
-    OR              shift and go to state 56
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for LT resolved as shift
+  ! shift/reduce conflict for GT resolved as shift
+  ! shift/reduce conflict for LEQ resolved as shift
+  ! shift/reduce conflict for GEQ resolved as shift
+  ! shift/reduce conflict for EQ resolved as shift
+  ! shift/reduce conflict for NEQ resolved as shift
+    BEGIN           reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    THEN            reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    SEMICOLON       reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    UNTIL           reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    END             reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    ELSE            reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    RPAREN          reduce using rule 34 (l_expr -> l_expr l_op l_expr .)
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
+  ! OR              [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! AND             [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! LT              [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! GT              [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! LEQ             [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! GEQ             [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! EQ              [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
+  ! NEQ             [ reduce using rule 34 (l_expr -> l_expr l_op l_expr .) ]
 
-state 78
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
-    (36) l_term -> l_term OR l_fact .
-    (38) l_fact -> l_fact . oprel a_expr
-    (41) oprel -> . LT
-    (42) oprel -> . GT
-    (43) oprel -> . LEQ
-    (44) oprel -> . GEQ
-    (45) oprel -> . EQ
-    (46) oprel -> . NEQ
+state 76
 
-    OR              reduce using rule 36 (l_term -> l_term OR l_fact .)
-    AND             reduce using rule 36 (l_term -> l_term OR l_fact .)
-    BEGIN           reduce using rule 36 (l_term -> l_term OR l_fact .)
-    THEN            reduce using rule 36 (l_term -> l_term OR l_fact .)
-    SEMICOLON       reduce using rule 36 (l_term -> l_term OR l_fact .)
-    UNTIL           reduce using rule 36 (l_term -> l_term OR l_fact .)
-    END             reduce using rule 36 (l_term -> l_term OR l_fact .)
-    ELSE            reduce using rule 36 (l_term -> l_term OR l_fact .)
-    RPAREN          reduce using rule 36 (l_term -> l_term OR l_fact .)
-    LT              shift and go to state 58
-    GT              shift and go to state 59
-    LEQ             shift and go to state 60
-    GEQ             shift and go to state 61
-    EQ              shift and go to state 62
-    NEQ             shift and go to state 63
-
-    oprel                          shift and go to state 57
-
-state 79
-
-    (38) l_fact -> l_fact oprel a_expr .
+    (35) l_expr -> l_expr oprel a_expr .
     (22) a_expr -> a_expr . a_op a_expr
     (28) a_op -> . ADD
     (29) a_op -> . SUB
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    LT              reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    GT              reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    LEQ             reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    GEQ             reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    EQ              reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    NEQ             reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    OR              reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    AND             reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    BEGIN           reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    THEN            reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    SEMICOLON       reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    UNTIL           reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    END             reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    ELSE            reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    RPAREN          reduce using rule 38 (l_fact -> l_fact oprel a_expr .)
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    BEGIN           reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    OR              reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    AND             reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    LT              reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    GT              reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    LEQ             reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    GEQ             reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    EQ              reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    NEQ             reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    THEN            reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    SEMICOLON       reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    UNTIL           reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    END             reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    ELSE            reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    RPAREN          reduce using rule 35 (l_expr -> l_expr oprel a_expr .)
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 80
+state 77
 
-    (40) l_fact -> LPAREN l_expr RPAREN .
+    (37) l_expr -> LPAREN l_expr RPAREN .
 
-    LT              reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    GT              reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    LEQ             reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    GEQ             reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    EQ              reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    NEQ             reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    OR              reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    AND             reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    BEGIN           reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    THEN            reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    SEMICOLON       reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    UNTIL           reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    END             reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    ELSE            reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
-    RPAREN          reduce using rule 40 (l_fact -> LPAREN l_expr RPAREN .)
+    BEGIN           reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    OR              reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    AND             reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    LT              reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    GT              reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    LEQ             reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    GEQ             reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    EQ              reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    NEQ             reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    THEN            reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    SEMICOLON       reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    UNTIL           reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    END             reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    ELSE            reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
+    RPAREN          reduce using rule 37 (l_expr -> LPAREN l_expr RPAREN .)
 
 
-state 81
+state 78
 
     (16) repeat -> REPEAT stmt_list UNTIL l_expr .
-    (34) l_expr -> l_expr . AND l_term
+    (34) l_expr -> l_expr . l_op l_expr
+    (35) l_expr -> l_expr . oprel a_expr
+    (38) l_op -> . OR
+    (39) l_op -> . AND
+    (40) oprel -> . LT
+    (41) oprel -> . GT
+    (42) oprel -> . LEQ
+    (43) oprel -> . GEQ
+    (44) oprel -> . EQ
+    (45) oprel -> . NEQ
 
     SEMICOLON       reduce using rule 16 (repeat -> REPEAT stmt_list UNTIL l_expr .)
     UNTIL           reduce using rule 16 (repeat -> REPEAT stmt_list UNTIL l_expr .)
     END             reduce using rule 16 (repeat -> REPEAT stmt_list UNTIL l_expr .)
     ELSE            reduce using rule 16 (repeat -> REPEAT stmt_list UNTIL l_expr .)
-    AND             shift and go to state 55
+    OR              shift and go to state 55
+    AND             shift and go to state 56
+    LT              shift and go to state 57
+    GT              shift and go to state 58
+    LEQ             shift and go to state 59
+    GEQ             shift and go to state 60
+    EQ              shift and go to state 61
+    NEQ             shift and go to state 62
 
+    l_op                           shift and go to state 53
+    oprel                          shift and go to state 54
 
-state 82
+state 79
 
     (18) foreach -> FOREACH ID IN LPAREN . a_expr COLON a_expr RPAREN stmt
     (22) a_expr -> . a_expr a_op a_expr
@@ -1756,19 +1748,19 @@ state 82
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 84
+    a_expr                         shift and go to state 81
     varref                         shift and go to state 29
 
-state 83
+state 80
 
     (19) if_stmt -> IF l_expr THEN stmt_list . ELSE else_stmt
     (2) stmt_list -> stmt_list . SEMICOLON stmt
 
-    ELSE            shift and go to state 85
-    SEMICOLON       shift and go to state 68
+    ELSE            shift and go to state 82
+    SEMICOLON       shift and go to state 66
 
 
-state 84
+state 81
 
     (18) foreach -> FOREACH ID IN LPAREN a_expr . COLON a_expr RPAREN stmt
     (22) a_expr -> a_expr . a_op a_expr
@@ -1777,31 +1769,31 @@ state 84
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    COLON           shift and go to state 86
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    COLON           shift and go to state 83
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 85
+state 82
 
     (19) if_stmt -> IF l_expr THEN stmt_list ELSE . else_stmt
-    (20) else_stmt -> .
-    (21) else_stmt -> . ELSE stmt
+    (20) else_stmt -> . ELSE stmt
+    (21) else_stmt -> .
 
   ! shift/reduce conflict for ELSE resolved as shift
-    SEMICOLON       reduce using rule 20 (else_stmt -> .)
-    UNTIL           reduce using rule 20 (else_stmt -> .)
-    END             reduce using rule 20 (else_stmt -> .)
-    ELSE            shift and go to state 87
+    ELSE            shift and go to state 84
+    SEMICOLON       reduce using rule 21 (else_stmt -> .)
+    UNTIL           reduce using rule 21 (else_stmt -> .)
+    END             reduce using rule 21 (else_stmt -> .)
 
-  ! ELSE            [ reduce using rule 20 (else_stmt -> .) ]
+  ! ELSE            [ reduce using rule 21 (else_stmt -> .) ]
 
-    else_stmt                      shift and go to state 88
+    else_stmt                      shift and go to state 85
 
-state 86
+state 83
 
     (18) foreach -> FOREACH ID IN LPAREN a_expr COLON . a_expr RPAREN stmt
     (22) a_expr -> . a_expr a_op a_expr
@@ -1819,12 +1811,12 @@ state 86
     LPAREN          shift and go to state 32
     ID              shift and go to state 19
 
-    a_expr                         shift and go to state 89
+    a_expr                         shift and go to state 86
     varref                         shift and go to state 29
 
-state 87
+state 84
 
-    (21) else_stmt -> ELSE . stmt
+    (20) else_stmt -> ELSE . stmt
     (4) stmt -> . assignment
     (5) stmt -> . read
     (6) stmt -> . write
@@ -1853,7 +1845,7 @@ state 87
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt                           shift and go to state 90
+    stmt                           shift and go to state 87
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -1864,7 +1856,7 @@ state 87
     if_stmt                        shift and go to state 11
     varref                         shift and go to state 12
 
-state 88
+state 85
 
     (19) if_stmt -> IF l_expr THEN stmt_list ELSE else_stmt .
 
@@ -1874,7 +1866,7 @@ state 88
     ELSE            reduce using rule 19 (if_stmt -> IF l_expr THEN stmt_list ELSE else_stmt .)
 
 
-state 89
+state 86
 
     (18) foreach -> FOREACH ID IN LPAREN a_expr COLON a_expr . RPAREN stmt
     (22) a_expr -> a_expr . a_op a_expr
@@ -1883,25 +1875,25 @@ state 89
     (30) a_op -> . MUL
     (31) a_op -> . DIV
 
-    RPAREN          shift and go to state 91
-    ADD             shift and go to state 48
-    SUB             shift and go to state 49
-    MUL             shift and go to state 50
-    DIV             shift and go to state 51
+    RPAREN          shift and go to state 88
+    ADD             shift and go to state 46
+    SUB             shift and go to state 47
+    MUL             shift and go to state 48
+    DIV             shift and go to state 49
 
-    a_op                           shift and go to state 47
+    a_op                           shift and go to state 45
 
-state 90
+state 87
 
-    (21) else_stmt -> ELSE stmt .
+    (20) else_stmt -> ELSE stmt .
 
-    SEMICOLON       reduce using rule 21 (else_stmt -> ELSE stmt .)
-    UNTIL           reduce using rule 21 (else_stmt -> ELSE stmt .)
-    END             reduce using rule 21 (else_stmt -> ELSE stmt .)
-    ELSE            reduce using rule 21 (else_stmt -> ELSE stmt .)
+    SEMICOLON       reduce using rule 20 (else_stmt -> ELSE stmt .)
+    UNTIL           reduce using rule 20 (else_stmt -> ELSE stmt .)
+    END             reduce using rule 20 (else_stmt -> ELSE stmt .)
+    ELSE            reduce using rule 20 (else_stmt -> ELSE stmt .)
 
 
-state 91
+state 88
 
     (18) foreach -> FOREACH ID IN LPAREN a_expr COLON a_expr RPAREN . stmt
     (4) stmt -> . assignment
@@ -1932,7 +1924,7 @@ state 91
     IF              shift and go to state 20
     ID              shift and go to state 19
 
-    stmt                           shift and go to state 92
+    stmt                           shift and go to state 89
     assignment                     shift and go to state 4
     read                           shift and go to state 5
     write                          shift and go to state 6
@@ -1943,7 +1935,7 @@ state 91
     if_stmt                        shift and go to state 11
     varref                         shift and go to state 12
 
-state 92
+state 89
 
     (18) foreach -> FOREACH ID IN LPAREN a_expr COLON a_expr RPAREN stmt .
 
@@ -1955,13 +1947,22 @@ state 92
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for ADD in state 52 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 52 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 52 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 52 resolved as shift
-WARNING: shift/reduce conflict for RPAREN in state 66 resolved as shift
-WARNING: shift/reduce conflict for ADD in state 75 resolved as shift
-WARNING: shift/reduce conflict for SUB in state 75 resolved as shift
-WARNING: shift/reduce conflict for MUL in state 75 resolved as shift
-WARNING: shift/reduce conflict for DIV in state 75 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 85 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 50 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 50 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 50 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 50 resolved as shift
+WARNING: shift/reduce conflict for RPAREN in state 64 resolved as shift
+WARNING: shift/reduce conflict for COMMA in state 71 resolved as shift
+WARNING: shift/reduce conflict for ADD in state 73 resolved as shift
+WARNING: shift/reduce conflict for SUB in state 73 resolved as shift
+WARNING: shift/reduce conflict for MUL in state 73 resolved as shift
+WARNING: shift/reduce conflict for DIV in state 73 resolved as shift
+WARNING: shift/reduce conflict for OR in state 75 resolved as shift
+WARNING: shift/reduce conflict for AND in state 75 resolved as shift
+WARNING: shift/reduce conflict for LT in state 75 resolved as shift
+WARNING: shift/reduce conflict for GT in state 75 resolved as shift
+WARNING: shift/reduce conflict for LEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for GEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for EQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for NEQ in state 75 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 82 resolved as shift

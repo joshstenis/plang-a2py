@@ -122,8 +122,8 @@ def p_if_stmt(p):
     '''if_stmt : IF l_expr THEN stmt_list ELSE else_stmt'''
 
 def p_else_stmt(p):
-    '''else_stmt : 
-                 | ELSE stmt'''
+    '''else_stmt : ELSE stmt
+                 | '''
 
 def p_a_expr(p):
     '''a_expr : a_expr a_op a_expr
@@ -144,17 +144,14 @@ def p_varref(p):
               | varref LBRACK a_expr RBRACK'''
 
 def p_l_expr(p):
-    '''l_expr : l_expr AND l_term
-              | l_term'''
-
-def p_l_term(p):
-    '''l_term : l_term OR l_fact
-              | l_fact'''
-
-def p_l_fact(p):
-    '''l_fact : l_fact oprel a_expr
+    '''l_expr : l_expr l_op l_expr
+              | l_expr oprel a_expr
               | a_expr
               | LPAREN l_expr RPAREN'''
+
+def p_l_op(p):
+    '''l_op : OR 
+            | AND'''
 
 def p_oprel(p):
     '''oprel : LT
@@ -165,8 +162,8 @@ def p_oprel(p):
              | NEQ'''
 
 def p_varlist(p):
-    '''varlist : varref
-               | varref COMMA varlist'''
+    '''varlist : varlist COMMA varlist
+               | varref'''
 
 def p_expr_list(p):
     '''expr_list : a_expr
