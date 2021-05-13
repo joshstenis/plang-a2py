@@ -12,6 +12,13 @@ tokens = (
     'SEMICOLON', 'COLON', 'LPAREN', 'RPAREN', 'LBRACK', 'RBRACK', 'COMMA_DELIM', 'COMMENT'
 )
 
+precedences = [
+    ('left', 'OR'), 
+    ('left', 'AND'), 
+    ('left', ('SUB', 'ADD')),
+    ('left', ('MUL', 'DIV')),
+]
+
 # Skips commmented lines
 def t_COMMENT(t):
     r'\".+\"'
