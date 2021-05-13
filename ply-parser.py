@@ -20,74 +20,109 @@ def t_COMMENT(t):
 
 def t_LITERAL_STR(t):
     r'\".+\"'
+    return t
 def t_SEMICOLON(t):
     r';'
+    return t
 def t_ASSIGN(t):
     r':='
+    return t
 def t_COLON(t):
     r':'
+    return t
 def t_LPAREN(t):
     r'\('
+    return t
 def t_RPAREN(t):
     r'\)'
+    return t
 def t_LBRACK(t):
     r'\['
+    return t
 def t_RBRACK(t):
     r']'
+    return t
 def t_COMMA(t):
     r','
+    return t
 def t_ADD(t):
     r'\+'
+    return t
 def t_SUB(t):
     r'-'
+    return t
 def t_MUL(t):
     r'\*'
+    return t
 def t_DIV(t):
     r'/'
+    return t
 def t_LEQ(t):
     r'<='
+    return t
 def t_GEQ(t):
     r'>='
+    return t
 def t_LT(t):
     r'<'
+    return t
 def t_GT(t):
     r'>'
+    return t
 def t_EQ(t):
     r'=='
+    return t
 def t_NEQ(t):
     r'!='
+    return t
 def t_FOREACH(t):
     r'foreach'
+    return t
 def t_REPEAT(t):
     r'repeat'
+    return t
 def t_WHILE(t):
     r'while'
+    return t
 def t_BEGIN(t):
     r'begin'
+    return t
 def t_UNTIL(t):
     r'until'
+    return t
 def t_WRITE(t):
     r'write'
+    return t
 def t_THEN(t):
     r'then'
+    return t
 def t_ELSE(t):
     r'else'
+    return t
 def t_READ(t):
     r'read'
+    return t
 def t_END(t):
     r'end'
+    return t
 def t_AND(t):
     r'and'
+    return t
 def t_OR(t):
     r'or'
+    return t
 def t_IF(t):
     r'if'
+    return t
 def t_IN(t):
     r'in'
+    return t
 def t_NUM(t):
     r'\d+\.\d+|\d+'
+    return t
 def t_ID(t):
     r'[a-zA-Z_]\w*'
+    return t
 
 t_ignore = ' \t'
 
