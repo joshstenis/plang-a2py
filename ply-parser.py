@@ -9,7 +9,7 @@ tokens = (
     'ADD', 'SUB', 'MUL', 'DIV', 
     'LT', 'GT', 'LEQ', 'GEQ', 'EQ', 'NEQ', 
     'FOREACH', 'REPEAT', 'WHILE', 'BEGIN', 'UNTIL', 'WRITE', 'THEN', 'ELSE', 'READ', 'END', 'AND', 'OR', 'IF', 'IN', 
-    'ID', 'NUM', 'EOF'
+    'ID', 'NUM'
 )
 
 # Skips commmented lines

@@ -3,7 +3,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     COMMENT
-    EOF
 
 Grammar
 
@@ -70,7 +69,6 @@ COMMENT              :
 DIV                  : 31
 ELSE                 : 21
 END                  : 17
-EOF                  : 
 EQ                   : 44
 FOREACH              : 18
 GEQ                  : 43
