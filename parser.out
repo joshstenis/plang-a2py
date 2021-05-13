@@ -55,9 +55,9 @@ Rule 45    oprel -> GEQ
 Rule 46    oprel -> EQ
 Rule 47    oprel -> NEQ
 Rule 48    varlist -> varref
-Rule 49    varlist -> varref COMMA_DELIM varlist
+Rule 49    varlist -> varref COMMA varlist
 Rule 50    expr_list -> a_expr
-Rule 51    expr_list -> expr_list COMMA_DELIM a_expr
+Rule 51    expr_list -> expr_list COMMA a_expr
 
 Terminals, with rules where they appear
 
@@ -66,7 +66,7 @@ AND                  : 35
 ASSIGN               : 12
 BEGIN                : 17
 COLON                : 18
-COMMA_DELIM          : 49 51
+COMMA                : 49 51
 COMMENT              : 
 DIV                  : 26
 ELSE                 : 19 21
@@ -290,7 +290,7 @@ state 13
 
     (13) read -> READ . varlist
     (48) varlist -> . varref
-    (49) varlist -> . varref COMMA_DELIM varlist
+    (49) varlist -> . varref COMMA varlist
     (33) varref -> . ID
     (34) varref -> . varref LBRACK a_expr RBRACK
 
@@ -303,7 +303,7 @@ state 14
 
     (14) write -> WRITE . expr_list
     (50) expr_list -> . a_expr
-    (51) expr_list -> . expr_list COMMA_DELIM a_expr
+    (51) expr_list -> . expr_list COMMA a_expr
     (22) a_expr -> . a_expr ADD a_term
     (23) a_expr -> . a_expr SUB a_term
     (24) a_expr -> . a_term
@@ -471,7 +471,7 @@ state 19
 
     ASSIGN          reduce using rule 33 (varref -> ID .)
     LBRACK          reduce using rule 33 (varref -> ID .)
-    COMMA_DELIM     reduce using rule 33 (varref -> ID .)
+    COMMA           reduce using rule 33 (varref -> ID .)
     SEMICOLON       reduce using rule 33 (varref -> ID .)
     UNTIL           reduce using rule 33 (varref -> ID .)
     END             reduce using rule 33 (varref -> ID .)
@@ -656,27 +656,27 @@ state 24
 state 25
 
     (48) varlist -> varref .
-    (49) varlist -> varref . COMMA_DELIM varlist
+    (49) varlist -> varref . COMMA varlist
     (34) varref -> varref . LBRACK a_expr RBRACK
 
     SEMICOLON       reduce using rule 48 (varlist -> varref .)
     UNTIL           reduce using rule 48 (varlist -> varref .)
     END             reduce using rule 48 (varlist -> varref .)
     ELSE            reduce using rule 48 (varlist -> varref .)
-    COMMA_DELIM     shift and go to state 47
+    COMMA           shift and go to state 47
     LBRACK          shift and go to state 23
 
 
 state 26
 
     (14) write -> WRITE expr_list .
-    (51) expr_list -> expr_list . COMMA_DELIM a_expr
+    (51) expr_list -> expr_list . COMMA a_expr
 
     SEMICOLON       reduce using rule 14 (write -> WRITE expr_list .)
     UNTIL           reduce using rule 14 (write -> WRITE expr_list .)
     END             reduce using rule 14 (write -> WRITE expr_list .)
     ELSE            reduce using rule 14 (write -> WRITE expr_list .)
-    COMMA_DELIM     shift and go to state 48
+    COMMA           shift and go to state 48
 
 
 state 27
@@ -685,7 +685,7 @@ state 27
     (22) a_expr -> a_expr . ADD a_term
     (23) a_expr -> a_expr . SUB a_term
 
-    COMMA_DELIM     reduce using rule 50 (expr_list -> a_expr .)
+    COMMA           reduce using rule 50 (expr_list -> a_expr .)
     SEMICOLON       reduce using rule 50 (expr_list -> a_expr .)
     UNTIL           reduce using rule 50 (expr_list -> a_expr .)
     END             reduce using rule 50 (expr_list -> a_expr .)
@@ -702,7 +702,7 @@ state 28
 
     ADD             reduce using rule 24 (a_expr -> a_term .)
     SUB             reduce using rule 24 (a_expr -> a_term .)
-    COMMA_DELIM     reduce using rule 24 (a_expr -> a_term .)
+    COMMA           reduce using rule 24 (a_expr -> a_term .)
     SEMICOLON       reduce using rule 24 (a_expr -> a_term .)
     UNTIL           reduce using rule 24 (a_expr -> a_term .)
     END             reduce using rule 24 (a_expr -> a_term .)
@@ -751,7 +751,7 @@ state 30
     DIV             reduce using rule 27 (a_term -> a_fact .)
     ADD             reduce using rule 27 (a_term -> a_fact .)
     SUB             reduce using rule 27 (a_term -> a_fact .)
-    COMMA_DELIM     reduce using rule 27 (a_term -> a_fact .)
+    COMMA           reduce using rule 27 (a_term -> a_fact .)
     SEMICOLON       reduce using rule 27 (a_term -> a_fact .)
     UNTIL           reduce using rule 27 (a_term -> a_fact .)
     END             reduce using rule 27 (a_term -> a_fact .)
@@ -779,7 +779,7 @@ state 31
     DIV             reduce using rule 28 (a_fact -> varref .)
     ADD             reduce using rule 28 (a_fact -> varref .)
     SUB             reduce using rule 28 (a_fact -> varref .)
-    COMMA_DELIM     reduce using rule 28 (a_fact -> varref .)
+    COMMA           reduce using rule 28 (a_fact -> varref .)
     SEMICOLON       reduce using rule 28 (a_fact -> varref .)
     UNTIL           reduce using rule 28 (a_fact -> varref .)
     END             reduce using rule 28 (a_fact -> varref .)
@@ -808,7 +808,7 @@ state 32
     DIV             reduce using rule 29 (a_fact -> NUM .)
     ADD             reduce using rule 29 (a_fact -> NUM .)
     SUB             reduce using rule 29 (a_fact -> NUM .)
-    COMMA_DELIM     reduce using rule 29 (a_fact -> NUM .)
+    COMMA           reduce using rule 29 (a_fact -> NUM .)
     SEMICOLON       reduce using rule 29 (a_fact -> NUM .)
     UNTIL           reduce using rule 29 (a_fact -> NUM .)
     END             reduce using rule 29 (a_fact -> NUM .)
@@ -836,7 +836,7 @@ state 33
     DIV             reduce using rule 30 (a_fact -> LITERAL_STR .)
     ADD             reduce using rule 30 (a_fact -> LITERAL_STR .)
     SUB             reduce using rule 30 (a_fact -> LITERAL_STR .)
-    COMMA_DELIM     reduce using rule 30 (a_fact -> LITERAL_STR .)
+    COMMA           reduce using rule 30 (a_fact -> LITERAL_STR .)
     SEMICOLON       reduce using rule 30 (a_fact -> LITERAL_STR .)
     UNTIL           reduce using rule 30 (a_fact -> LITERAL_STR .)
     END             reduce using rule 30 (a_fact -> LITERAL_STR .)
@@ -1073,9 +1073,9 @@ state 46
 
 state 47
 
-    (49) varlist -> varref COMMA_DELIM . varlist
+    (49) varlist -> varref COMMA . varlist
     (48) varlist -> . varref
-    (49) varlist -> . varref COMMA_DELIM varlist
+    (49) varlist -> . varref COMMA varlist
     (33) varref -> . ID
     (34) varref -> . varref LBRACK a_expr RBRACK
 
@@ -1086,7 +1086,7 @@ state 47
 
 state 48
 
-    (51) expr_list -> expr_list COMMA_DELIM . a_expr
+    (51) expr_list -> expr_list COMMA . a_expr
     (22) a_expr -> . a_expr ADD a_term
     (23) a_expr -> . a_expr SUB a_term
     (24) a_expr -> . a_term
@@ -1208,7 +1208,7 @@ state 53
     DIV             reduce using rule 31 (a_fact -> SUB a_fact .)
     ADD             reduce using rule 31 (a_fact -> SUB a_fact .)
     SUB             reduce using rule 31 (a_fact -> SUB a_fact .)
-    COMMA_DELIM     reduce using rule 31 (a_fact -> SUB a_fact .)
+    COMMA           reduce using rule 31 (a_fact -> SUB a_fact .)
     SEMICOLON       reduce using rule 31 (a_fact -> SUB a_fact .)
     UNTIL           reduce using rule 31 (a_fact -> SUB a_fact .)
     END             reduce using rule 31 (a_fact -> SUB a_fact .)
@@ -1590,7 +1590,7 @@ state 72
 
     ASSIGN          reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
     LBRACK          reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
-    COMMA_DELIM     reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
+    COMMA           reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
     SEMICOLON       reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
     UNTIL           reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
     END             reduce using rule 34 (varref -> varref LBRACK a_expr RBRACK .)
@@ -1616,25 +1616,25 @@ state 72
 
 state 73
 
-    (49) varlist -> varref COMMA_DELIM varlist .
+    (49) varlist -> varref COMMA varlist .
 
-    SEMICOLON       reduce using rule 49 (varlist -> varref COMMA_DELIM varlist .)
-    UNTIL           reduce using rule 49 (varlist -> varref COMMA_DELIM varlist .)
-    END             reduce using rule 49 (varlist -> varref COMMA_DELIM varlist .)
-    ELSE            reduce using rule 49 (varlist -> varref COMMA_DELIM varlist .)
+    SEMICOLON       reduce using rule 49 (varlist -> varref COMMA varlist .)
+    UNTIL           reduce using rule 49 (varlist -> varref COMMA varlist .)
+    END             reduce using rule 49 (varlist -> varref COMMA varlist .)
+    ELSE            reduce using rule 49 (varlist -> varref COMMA varlist .)
 
 
 state 74
 
-    (51) expr_list -> expr_list COMMA_DELIM a_expr .
+    (51) expr_list -> expr_list COMMA a_expr .
     (22) a_expr -> a_expr . ADD a_term
     (23) a_expr -> a_expr . SUB a_term
 
-    COMMA_DELIM     reduce using rule 51 (expr_list -> expr_list COMMA_DELIM a_expr .)
-    SEMICOLON       reduce using rule 51 (expr_list -> expr_list COMMA_DELIM a_expr .)
-    UNTIL           reduce using rule 51 (expr_list -> expr_list COMMA_DELIM a_expr .)
-    END             reduce using rule 51 (expr_list -> expr_list COMMA_DELIM a_expr .)
-    ELSE            reduce using rule 51 (expr_list -> expr_list COMMA_DELIM a_expr .)
+    COMMA           reduce using rule 51 (expr_list -> expr_list COMMA a_expr .)
+    SEMICOLON       reduce using rule 51 (expr_list -> expr_list COMMA a_expr .)
+    UNTIL           reduce using rule 51 (expr_list -> expr_list COMMA a_expr .)
+    END             reduce using rule 51 (expr_list -> expr_list COMMA a_expr .)
+    ELSE            reduce using rule 51 (expr_list -> expr_list COMMA a_expr .)
     ADD             shift and go to state 49
     SUB             shift and go to state 50
 
@@ -1647,7 +1647,7 @@ state 75
 
     ADD             reduce using rule 22 (a_expr -> a_expr ADD a_term .)
     SUB             reduce using rule 22 (a_expr -> a_expr ADD a_term .)
-    COMMA_DELIM     reduce using rule 22 (a_expr -> a_expr ADD a_term .)
+    COMMA           reduce using rule 22 (a_expr -> a_expr ADD a_term .)
     SEMICOLON       reduce using rule 22 (a_expr -> a_expr ADD a_term .)
     UNTIL           reduce using rule 22 (a_expr -> a_expr ADD a_term .)
     END             reduce using rule 22 (a_expr -> a_expr ADD a_term .)
@@ -1676,7 +1676,7 @@ state 76
 
     ADD             reduce using rule 23 (a_expr -> a_expr SUB a_term .)
     SUB             reduce using rule 23 (a_expr -> a_expr SUB a_term .)
-    COMMA_DELIM     reduce using rule 23 (a_expr -> a_expr SUB a_term .)
+    COMMA           reduce using rule 23 (a_expr -> a_expr SUB a_term .)
     SEMICOLON       reduce using rule 23 (a_expr -> a_expr SUB a_term .)
     UNTIL           reduce using rule 23 (a_expr -> a_expr SUB a_term .)
     END             reduce using rule 23 (a_expr -> a_expr SUB a_term .)
@@ -1705,7 +1705,7 @@ state 77
     DIV             reduce using rule 25 (a_term -> a_term MUL a_fact .)
     ADD             reduce using rule 25 (a_term -> a_term MUL a_fact .)
     SUB             reduce using rule 25 (a_term -> a_term MUL a_fact .)
-    COMMA_DELIM     reduce using rule 25 (a_term -> a_term MUL a_fact .)
+    COMMA           reduce using rule 25 (a_term -> a_term MUL a_fact .)
     SEMICOLON       reduce using rule 25 (a_term -> a_term MUL a_fact .)
     UNTIL           reduce using rule 25 (a_term -> a_term MUL a_fact .)
     END             reduce using rule 25 (a_term -> a_term MUL a_fact .)
@@ -1732,7 +1732,7 @@ state 78
     DIV             reduce using rule 26 (a_term -> a_term DIV a_fact .)
     ADD             reduce using rule 26 (a_term -> a_term DIV a_fact .)
     SUB             reduce using rule 26 (a_term -> a_term DIV a_fact .)
-    COMMA_DELIM     reduce using rule 26 (a_term -> a_term DIV a_fact .)
+    COMMA           reduce using rule 26 (a_term -> a_term DIV a_fact .)
     SEMICOLON       reduce using rule 26 (a_term -> a_term DIV a_fact .)
     UNTIL           reduce using rule 26 (a_term -> a_term DIV a_fact .)
     END             reduce using rule 26 (a_term -> a_term DIV a_fact .)
@@ -1759,7 +1759,7 @@ state 79
     DIV             reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
     ADD             reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
     SUB             reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
-    COMMA_DELIM     reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
+    COMMA           reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
     SEMICOLON       reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
     UNTIL           reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
     END             reduce using rule 32 (a_fact -> LPAREN a_expr RPAREN .)
