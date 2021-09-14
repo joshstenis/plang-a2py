@@ -1,0 +1,4 @@
+
+foreach i in (1:N)
+  read A[i];
+  
